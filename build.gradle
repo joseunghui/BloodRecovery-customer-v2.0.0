@@ -15,6 +15,9 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.projectlombok:lombok:1.18.26'
+    implementation 'com.afterpay:afterpay-android:4.3.0'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
