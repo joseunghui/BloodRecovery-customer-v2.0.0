@@ -1,5 +1,6 @@
 package com.potatoes.BloodRecoverycustomerv200.interfaces.rest.controller;
 
+import com.potatoes.BloodRecoverycustomerv200.application.commandservices.AddUserCommandService;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.AddUserCommand;
 import com.potatoes.BloodRecoverycustomerv200.domain.service.AddUserService;
 import com.potatoes.BloodRecoverycustomerv200.interfaces.rest.dto.AddUserFormDto;
@@ -21,17 +22,18 @@ import static com.potatoes.BloodRecoverycustomerv200.interfaces.rest.constants.U
 public class AddUserController {
 
     @Autowired
-    private AddUserService addUserService;
+    private AddUserCommandService addUserCommandService;
 
+    @Autowired
     private final AddUserMapper addUserMapper;
 
     @PostMapping(USER_ADD)
     public ResponseEntity add(
-            @Validated @ModelAttribute("user") AddUserFormDto form) {
+            @Validated @ModelAttribute("form") AddUserFormDto form) {
 
         // 회원가입 등록
         AddUserCommand command = addUserMapper.dtoToCommand(form); // dto -> command 로 afterMapping TODO 모르겠음ㅎ
-        addUserService.addUser(command);
+        addUserCommandService.addUser(command);
 
         return new ResponseEntity<>(
                 getSuccessHeader(),

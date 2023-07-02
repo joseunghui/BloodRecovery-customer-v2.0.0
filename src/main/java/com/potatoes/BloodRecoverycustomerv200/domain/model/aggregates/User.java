@@ -1,6 +1,7 @@
 package com.potatoes.BloodRecoverycustomerv200.domain.model.aggregates;
 
 
+import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.AddUserCommand;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,5 +29,13 @@ public class User {
     private String gradeSn;
     @Column(name = "DATE", nullable = false)
     private Date date;
+
+    public User(AddUserCommand command) {
+        this.userName = command.getUserName();
+        this.userNickname = command.getUserNickname();
+        this.userPassword = command.getUserPassword();
+        this.gradeSn = command.getGradeSn();
+        this.date = command.getDate();
+    }
 
 }

@@ -8,6 +8,19 @@ group = 'com.potatoes'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
+ext {
+	lombokVersion = '1.18.22'
+	lombokMapstructBindVersion = '0.2.0'
+	mapStructVersion = '1.4.2.Final'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+
 repositories {
 	mavenCentral()
 }
@@ -17,9 +30,26 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.projectlombok:lombok:1.18.26'
-    implementation 'com.afterpay:afterpay-android:4.3.0'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	compileOnly "org.projectlombok:lombok:${lombokVersion}"
+	annotationProcessor 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+
+	//Junit5
+	testImplementation ('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+
+	//Mapstruct
+	implementation "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindVersion}"
+	implementation "org.mapstruct:mapstruct:${mapStructVersion}"
+	annotationProcessor "org.mapstruct:mapstruct-processor:${mapStructVersion}"
+	annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindVersion}"
+
+
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
