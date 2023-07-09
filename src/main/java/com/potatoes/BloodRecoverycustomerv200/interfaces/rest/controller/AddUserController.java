@@ -19,11 +19,8 @@ import static com.potatoes.BloodRecoverycustomerv200.interfaces.rest.constants.U
 @RequiredArgsConstructor
 @RequestMapping(USER)
 public class AddUserController {
+    private final AddUserCommandService addUserCommandService;
 
-    @Autowired
-    private AddUserCommandService addUserCommandService;
-
-    @Autowired
     private final AddUserMapper addUserMapper;
 
     @PostMapping(USER_ADD)

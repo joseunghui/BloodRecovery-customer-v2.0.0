@@ -2,14 +2,18 @@ package com.potatoes.BloodRecoverycustomerv200.domain.model.aggregates;
 
 
 import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.AddUserCommand;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.util.Date;
 
 @Entity
+@Getter
+@AllArgsConstructor
+@Builder
+@Table(schema = "User")
 public class User {
     @jakarta.persistence.Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -41,4 +45,7 @@ public class User {
         this.date = command.getDate();
     }
 
+    public User() {
+
+    }
 }
