@@ -5,7 +5,6 @@ import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.AddUserComma
 import com.potatoes.BloodRecoverycustomerv200.interfaces.rest.dto.AddUserFormDto;
 import com.potatoes.BloodRecoverycustomerv200.interfaces.rest.mapper.AddUserMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
