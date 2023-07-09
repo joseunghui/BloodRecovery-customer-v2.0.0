@@ -16,6 +16,8 @@ public class User {
     @Column(name = "ID", nullable = false)
     private Long id;
 
+    @Column(name = "USER_ID", nullable = false)
+    private String userId;
 
     @Column(name = "USER_NAME", nullable = false)
     private String userName;
@@ -31,6 +33,7 @@ public class User {
     private Date date;
 
     public User(AddUserCommand command) {
+        this.userId = command.getUserId();
         this.userName = command.getUserName();
         this.userNickname = command.getUserNickname();
         this.userPassword = command.getUserPassword();

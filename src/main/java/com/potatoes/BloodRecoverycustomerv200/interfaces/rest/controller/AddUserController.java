@@ -2,7 +2,6 @@ package com.potatoes.BloodRecoverycustomerv200.interfaces.rest.controller;
 
 import com.potatoes.BloodRecoverycustomerv200.application.commandservices.AddUserCommandService;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.AddUserCommand;
-import com.potatoes.BloodRecoverycustomerv200.domain.service.AddUserService;
 import com.potatoes.BloodRecoverycustomerv200.interfaces.rest.dto.AddUserFormDto;
 import com.potatoes.BloodRecoverycustomerv200.interfaces.rest.mapper.AddUserMapper;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +31,7 @@ public class AddUserController {
             @Validated @ModelAttribute("form") AddUserFormDto form) {
 
         // 회원가입 등록
-        AddUserCommand command = addUserMapper.dtoToCommand(form); // dto -> command 로 afterMapping TODO 모르겠음ㅎ
+        AddUserCommand command = addUserMapper.dtoToCommand(form);
         addUserCommandService.addUser(command);
 
         return new ResponseEntity<>(
@@ -47,6 +46,7 @@ public class AddUserController {
 
         headers.set("resultCode", "200");
         headers.set("resultMessage", "청상 처리 하였습니다.");
+        headers.set("userStatus", "R");
 
         return headers;
     }
