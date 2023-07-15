@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
 @Mapper(config = MapstructConfig.class)
-public abstract class AddUserMapper{
+public abstract class UserMapper {
 
     public abstract AddUserCommand dtoToCommand(AddUserFormDto form);
 

@@ -11,10 +11,14 @@ import java.util.Date;
 @ToString
 public class AddUserCommand {
     private String userId;
-    private String userName;
-    private String userNickname;
-    private String userPassword;
-    private String personalNo;
+    private String name;
+    private String nickname;
+    private String password;
+    private String bldTp;
+    private String address;
+    private String email;
+    private String phone;
     private String gradeSn;
+    private String userStatus;
     private Date date;
 }
