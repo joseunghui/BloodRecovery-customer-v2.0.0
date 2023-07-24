@@ -1,11 +1,13 @@
 package com.potatoes.BloodRecoverycustomerv200.interfaces.rest.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -19,11 +21,36 @@ public class AddUserFormDto {
 
     @NotBlank(groups = {userValid.class}, message = "이름은 필수입니다.")
     @NotNull(groups = {userValid.class}, message = "이름은 필수입니다.")
-    private String userName;
+    private String name;
+
+    @NotBlank(groups = {userValid.class}, message = "닉네임은 필수입니다.")
+    @NotNull(groups = {userValid.class}, message = "닉네임은 필수입니다.")
+    private String nickname;
 
     @NotBlank(groups = {userValid.class}, message = "비밀번호는 필수 입니다.")
     @NotNull(groups = {userValid.class}, message = "비밀번호는 필수 입니다.")
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d~!@#$%^&*()+|=]{8,20}$") //'숫자', '문자' 무조건 1개 이상, '최소 8자에서 최대 20자' 허용
-    private String userPassword;
+    private String password;
 
+    @NotBlank(groups = {userValid.class}, message = "비밀번호는 필수 입니다.")
+    @NotNull(groups = {userValid.class}, message = "비밀번호는 필수 입니다.")
+    private String bldTp;
+
+    @NotBlank(groups = {userValid.class}, message = "비밀번호는 필수 입니다.")
+    @NotNull(groups = {userValid.class}, message = "비밀번호는 필수 입니다.")
+    private String address;
+
+    @NotBlank(groups = {userValid.class}, message = "비밀번호는 필수 입니다.")
+    @NotNull(groups = {userValid.class}, message = "비밀번호는 필수 입니다.")
+    private String email;
+
+    @NotBlank(groups = {userValid.class}, message = "비밀번호는 필수 입니다.")
+    @NotNull(groups = {userValid.class}, message = "비밀번호는 필수 입니다.")
+    private String phone;
+
+    private String gradeSn;
+
+    private String userStatus;
+
+    private Date date;
 }

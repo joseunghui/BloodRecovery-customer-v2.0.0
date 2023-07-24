@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### DB 설정 정보 ###
+src/main/resources/application.properties

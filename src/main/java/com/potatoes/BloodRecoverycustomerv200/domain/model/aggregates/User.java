@@ -2,11 +2,11 @@ package com.potatoes.BloodRecoverycustomerv200.domain.model.aggregates;
 
 
 import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.AddUserCommand;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -15,7 +15,7 @@ import java.util.Date;
 @Builder
 @Table(schema = "User")
 public class User {
-    @jakarta.persistence.Id
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
     private Long id;
