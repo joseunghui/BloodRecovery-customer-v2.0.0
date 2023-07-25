@@ -11,8 +11,13 @@ import org.springframework.stereotype.Service;
 public class UserCommandService {
     private final UserRepository userRepository;
 
+    /**
+     * 회원 가입
+     * 
+     * @param command
+     * @return
+     */
     public User addUser(AddUserCommand command) {
-
         User user = new User(command);
         userRepository.save(user);
         return user;
