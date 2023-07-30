@@ -20,6 +20,12 @@ public class UserController extends BaseController {
 
     private final UserMapper userMapper;
 
+    /**
+     * 회원 가입
+     * 
+     * @param form
+     * @return
+     */
     @PostMapping(USER_ADD)
     public ResponseEntity<Object> addUser(
             @Validated @RequestBody AddUserFormDto form) {

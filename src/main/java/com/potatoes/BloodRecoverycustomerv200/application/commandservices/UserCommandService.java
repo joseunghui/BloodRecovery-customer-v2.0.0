@@ -12,7 +12,7 @@ public class UserCommandService {
     private final UserRepository userRepository;
 
     /**
-     * 회원가입 (신규 등록)
+     * 회원 가입
      *
      * @param command
      * @return
