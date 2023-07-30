@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class BaseController {
 
     // 초기 실행을 위한 페이지 연결
-    @RequestMapping("/")
+    @RequestMapping("/home")
     public String defaultStart() {
         return "실행 성공!";
     }

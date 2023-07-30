@@ -7,4 +7,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    /**
+     * 로그인
+     *
+     * @param userId
+     * @param password
+     */
+    void loginUser(String userId, String password);
 }

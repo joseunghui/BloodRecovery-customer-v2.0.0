@@ -10,8 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import static com.potatoes.BloodRecoverycustomerv200.interfaces.rest.constants.UserWebUrl.USER;
-import static com.potatoes.BloodRecoverycustomerv200.interfaces.rest.constants.UserWebUrl.USER_ADD;
+import static com.potatoes.BloodRecoverycustomerv200.interfaces.rest.constants.UserWebUrl.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,9 +24,22 @@ public class UserController extends BaseController {
     public ResponseEntity<Object> addUser(
             @Validated @RequestBody AddUserFormDto form) {
 
-        // 회원가입 등록
+        // 회원가입 (신규 등록)
         AddUserCommand command = userMapper.dtoToCommand(form);
         userCommandService.addUser(command);
+
+        return new ResponseEntity<>(
+                getSuccessHeader(),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping(USER_LOGIN)
+    public ResponseEntity<Object> loginUser(
+            @Validated @RequestBody String userId, String password) {
+
+        // 로그인
+        userCommandService.loginUser(userId, password);
 
         return new ResponseEntity<>(
                 getSuccessHeader(),
