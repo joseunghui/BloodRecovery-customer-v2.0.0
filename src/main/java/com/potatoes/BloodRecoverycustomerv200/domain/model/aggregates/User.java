@@ -44,6 +44,9 @@ public class User {
     @Column(name = "PHONE", nullable = false)
     private String phone;
 
+    @Column(name = "FILE_NM")
+    private String fileNm;
+
     @Column(name = "GRADE_SN", nullable = false)
     private String gradeSn;
 
@@ -62,6 +65,7 @@ public class User {
         this.address = command.getAddress();
         this.email = command.getEmail();
         this.phone = command.getPhone();
+        this.fileNm = command.getFileNm();
         this.gradeSn = command.getGradeSn();
         this.userStatus = command.getUserStatus();
         this.date = command.getDate();

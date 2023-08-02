@@ -3,6 +3,7 @@ package com.potatoes.BloodRecoverycustomerv200.interfaces.rest.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -47,6 +48,9 @@ public class AddUserFormDto {
     @NotBlank(groups = {userValid.class}, message = "비밀번호는 필수 입니다.")
     @NotNull(groups = {userValid.class}, message = "비밀번호는 필수 입니다.")
     private String phone;
+
+    private MultipartFile file;
+    private String fileNm;
 
     private String gradeSn;
 

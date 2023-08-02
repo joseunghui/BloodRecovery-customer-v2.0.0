@@ -18,6 +18,7 @@ public class AddUserCommand {
     private String address;
     private String email;
     private String phone;
+    private String fileNm;
     private String gradeSn;
     private String userStatus;
     private Date date;
