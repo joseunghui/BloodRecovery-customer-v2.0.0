@@ -28,10 +28,18 @@ public class UserCommandService {
      * 로그인
      *
      * @param userId
-     * @param password
      */
-    public void loginUser(String userId, String password) {
-        userRepository.loginUser(userId, password);
+    public User loginUser(String userId) {
+        User user = userRepository.findByUserId(userId);
 
+        // validation
+        if (user.getUserId().equals(null)) {
+            try {
+                throw new Exception(userId);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return user;
     }
 }

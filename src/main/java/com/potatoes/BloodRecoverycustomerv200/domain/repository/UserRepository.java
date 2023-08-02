@@ -8,10 +8,9 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     /**
-     * 로그인
+     * 로그인 (유저 아이디로 유저 찾기)
      *
      * @param userId
-     * @param password
      */
-    void loginUser(String userId, String password);
+    User findByUserId(String userId);
 }
