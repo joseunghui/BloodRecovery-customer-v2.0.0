@@ -25,6 +25,36 @@ public class UserCommandService {
     }
 
     /**
+     * ID 중복 확인
+     *
+     * @param userId
+     * @return
+     */
+    public boolean isDuplicateId(String userId) {
+        User user = userRepository.findByUserId(userId);
+        if (user.getUserId().isEmpty()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 닉네임 중복 확인
+     *
+     * @param nickname
+     * @return
+     */
+    public boolean isDuplicateNickname(String nickname) {
+        User user = userRepository.findByNickname(nickname);
+        if (user.getNickname().isEmpty()) {
+            return true;
+        }
+        return false;
+    }
+
+
+
+    /**
      * 로그인
      *
      * @param userId
@@ -42,4 +72,5 @@ public class UserCommandService {
         }
         return user;
     }
+
 }

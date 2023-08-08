@@ -43,12 +43,55 @@ public class UserController extends BaseController {
         );
     }
 
+    /**
+     * ID 중복 확인
+     *
+     * @param userId
+     * @return
+     */
+    @GetMapping(USER_ID_CHECK)
+    public ResponseEntity<Boolean> isDuplicateId(
+            @Validated @RequestParam String userId) {
+
+        // 유저 아이디 중복 확인
+        boolean isValid = userCommandService.isDuplicateId(userId);
+
+        return new ResponseEntity<>(
+                isValid,
+                getSuccessHeader(),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping(USER_NICK_CHECK)
+    public ResponseEntity<Boolean> isDuplicateNickname(
+            @Validated @RequestParam String nickname) {
+
+        // 닉네임 중복확인
+        boolean isValid = userCommandService.isDuplicateNickname(nickname);
+
+        return new ResponseEntity<>(
+                isValid,
+                getSuccessHeader(),
+                HttpStatus.OK
+        );
+    }
+
+    //TODO 실명인증 API 갖고와서 적용시키고 회원가입 개발 완료 해야함
+
+    /**
+     * 일반 로그인
+     *
+     * @param userId
+     * @param password
+     * @return
+     */
     @GetMapping(USER_LOGIN)
     public ResponseEntity<String> loginUser(
             @RequestParam String userId, @RequestParam String password) {
 
         // 해당 회원 username 값으로 Member 가져오기
-        Optional<User> user = Optional.ofNullable(userCommandService.loginUser(userId));
+        Optional<User> user = Optional.of(userCommandService.loginUser(userId));
 
         // 비번 동일한지 확인(암호화 안한 버전)
         if (!user.get().getPassword().equals(password)) {
@@ -64,4 +107,9 @@ public class UserController extends BaseController {
                 HttpStatus.OK
         );
     }
+
+    //TODO Social 로그인 기능 추가해야함
+
+
+
 }

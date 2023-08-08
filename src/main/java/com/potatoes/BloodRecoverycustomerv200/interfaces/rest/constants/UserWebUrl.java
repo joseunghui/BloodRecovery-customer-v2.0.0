@@ -8,6 +8,12 @@ public class UserWebUrl {
     // 가입
     public static final String USER_ADD = "/add";
 
+    // 아이디 중복체크
+    public static final String USER_ID_CHECK = "/check/id";
+
+    // 닉네임 중복체크
+    public static final String USER_NICK_CHECK = "/check/nickname";
+
     // 로그인
     public static final String USER_LOGIN = "/login";
 
