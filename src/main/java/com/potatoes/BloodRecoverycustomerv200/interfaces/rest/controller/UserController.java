@@ -63,6 +63,12 @@ public class UserController extends BaseController {
         );
     }
 
+    /**
+     * 닉네임 중복확인
+     *
+     * @param nickname
+     * @return
+     */
     @GetMapping(USER_NICK_CHECK)
     public ResponseEntity<Boolean> isDuplicateNickname(
             @Validated @RequestParam String nickname) {
