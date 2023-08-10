@@ -38,3 +38,6 @@ out/
 
 ### DB 설정 정보 ###
 src/main/resources/application.properties
+
+### 외부 인터페이스 연동 정보 ###
+src/main/resources/application_api.properties

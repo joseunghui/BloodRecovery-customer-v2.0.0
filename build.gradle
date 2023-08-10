@@ -62,6 +62,9 @@ dependencies {
 
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
+	// twilio
+	implementation group: "com.twilio.sdk", name: "twilio", version: "7.42.0"
+
 }
 
 tasks.named('test') {
