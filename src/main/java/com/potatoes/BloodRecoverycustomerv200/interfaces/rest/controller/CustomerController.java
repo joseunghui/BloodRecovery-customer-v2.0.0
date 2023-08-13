@@ -3,7 +3,7 @@ package com.potatoes.BloodRecoverycustomerv200.interfaces.rest.controller;
 import com.potatoes.BloodRecoverycustomerv200.application.commandservices.CustomerCommandService;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.aggregates.Customer;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.CustomerCommand;
-import com.potatoes.BloodRecoverycustomerv200.infrastructure.rest.dto.SampleDTO;
+import com.potatoes.BloodRecoverycustomerv200.infrastructure.rest.dto.CustomerValidation;
 import com.potatoes.BloodRecoverycustomerv200.interfaces.rest.dto.CustomerFormDto;
 import com.potatoes.BloodRecoverycustomerv200.interfaces.rest.mapper.CustomerMapper;
 import lombok.RequiredArgsConstructor;
@@ -55,10 +55,11 @@ public class CustomerController extends BaseController {
             @Validated @RequestParam String userId) {
 
         // 유저 아이디 중복 확인
-        SampleDTO dto = SampleDTO.builder().isValid(customerCommandService.isDuplicateId(userId)).build();
+        CustomerValidation valid = CustomerValidation.builder()
+                .isValid(customerCommandService.isDuplicateId(userId)).build();
 
         return new ResponseEntity<>(
-                dto,
+                valid,
                 getSuccessHeader(),
                 HttpStatus.OK
         );
@@ -75,10 +76,11 @@ public class CustomerController extends BaseController {
             @Validated @RequestParam String nickname) {
 
         // 닉네임 중복확인
-        SampleDTO dto = SampleDTO.builder().isValid(customerCommandService.isDuplicateNickname(nickname)).build();
+        CustomerValidation valid = CustomerValidation.builder()
+                .isValid(customerCommandService.isDuplicateNickname(nickname)).build();
 
         return new ResponseEntity<>(
-                dto,
+                valid,
                 getSuccessHeader(),
                 HttpStatus.OK
         );

@@ -13,7 +13,7 @@ import java.util.Date;
 @Getter
 @AllArgsConstructor
 @Builder
-@Table(schema = "User")
+@Table(schema = "Customer")
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

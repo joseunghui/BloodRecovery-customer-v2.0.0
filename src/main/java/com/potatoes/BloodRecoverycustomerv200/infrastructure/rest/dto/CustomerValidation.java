@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class SampleDTO {
+public class CustomerValidation {
     private boolean isValid;
 }
