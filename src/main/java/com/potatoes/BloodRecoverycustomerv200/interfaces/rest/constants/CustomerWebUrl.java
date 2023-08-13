@@ -1,6 +1,6 @@
 package com.potatoes.BloodRecoverycustomerv200.interfaces.rest.constants;
 
-public class UserWebUrl {
+public class CustomerWebUrl {
 
     // 회원 기본
     public static final String USER = "/user";

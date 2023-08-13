@@ -13,7 +13,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Builder
-public class AddUserFormDto {
+public class CustomerFormDto {
     private interface userValid{ }
 
     @NotBlank(groups = {userValid.class}, message = "아이디는 필수 입니다.")

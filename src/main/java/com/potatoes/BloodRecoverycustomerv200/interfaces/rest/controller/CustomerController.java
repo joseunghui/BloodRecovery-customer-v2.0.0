@@ -1,10 +1,11 @@
 package com.potatoes.BloodRecoverycustomerv200.interfaces.rest.controller;
 
-import com.potatoes.BloodRecoverycustomerv200.application.commandservices.UserCommandService;
-import com.potatoes.BloodRecoverycustomerv200.domain.model.aggregates.User;
-import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.AddUserCommand;
-import com.potatoes.BloodRecoverycustomerv200.interfaces.rest.dto.AddUserFormDto;
-import com.potatoes.BloodRecoverycustomerv200.interfaces.rest.mapper.UserMapper;
+import com.potatoes.BloodRecoverycustomerv200.application.commandservices.CustomerCommandService;
+import com.potatoes.BloodRecoverycustomerv200.domain.model.aggregates.Customer;
+import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.CustomerCommand;
+import com.potatoes.BloodRecoverycustomerv200.infrastructure.rest.dto.SampleDTO;
+import com.potatoes.BloodRecoverycustomerv200.interfaces.rest.dto.CustomerFormDto;
+import com.potatoes.BloodRecoverycustomerv200.interfaces.rest.mapper.CustomerMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,15 +14,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-import static com.potatoes.BloodRecoverycustomerv200.interfaces.rest.constants.UserWebUrl.*;
+import static com.potatoes.BloodRecoverycustomerv200.interfaces.rest.constants.CustomerWebUrl.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(USER)
-public class UserController extends BaseController {
-    private final UserCommandService userCommandService;
+public class CustomerController extends BaseController {
+    private final CustomerCommandService customerCommandService;
 
-    private final UserMapper userMapper;
+    private final CustomerMapper customerMapper;
 
     /**
      * 회원 가입
@@ -31,11 +32,11 @@ public class UserController extends BaseController {
      */
     @PostMapping(USER_ADD)
     public ResponseEntity<Object> addUser(
-            @Validated @RequestBody AddUserFormDto form) {
+            @Validated @RequestBody CustomerFormDto form) {
 
         // 회원가입 (신규 등록)
-        AddUserCommand command = userMapper.dtoToCommand(form);
-        userCommandService.addUser(command);
+        CustomerCommand command = customerMapper.dtoToCommand(form);
+        customerCommandService.addUser(command);
 
         return new ResponseEntity<>(
                 getSuccessHeader(),
@@ -50,14 +51,14 @@ public class UserController extends BaseController {
      * @return
      */
     @GetMapping(USER_ID_CHECK)
-    public ResponseEntity<Boolean> isDuplicateId(
+    public ResponseEntity<Object> isDuplicateId(
             @Validated @RequestParam String userId) {
 
         // 유저 아이디 중복 확인
-        boolean isValid = userCommandService.isDuplicateId(userId);
+        SampleDTO dto = SampleDTO.builder().isValid(customerCommandService.isDuplicateId(userId)).build();
 
         return new ResponseEntity<>(
-                isValid,
+                dto,
                 getSuccessHeader(),
                 HttpStatus.OK
         );
@@ -70,14 +71,14 @@ public class UserController extends BaseController {
      * @return
      */
     @GetMapping(USER_NICK_CHECK)
-    public ResponseEntity<Boolean> isDuplicateNickname(
+    public ResponseEntity<Object> isDuplicateNickname(
             @Validated @RequestParam String nickname) {
 
         // 닉네임 중복확인
-        boolean isValid = userCommandService.isDuplicateNickname(nickname);
+        SampleDTO dto = SampleDTO.builder().isValid(customerCommandService.isDuplicateNickname(nickname)).build();
 
         return new ResponseEntity<>(
-                isValid,
+                dto,
                 getSuccessHeader(),
                 HttpStatus.OK
         );
@@ -97,7 +98,7 @@ public class UserController extends BaseController {
             @RequestParam String userId, @RequestParam String password) {
 
         // 해당 회원 username 값으로 Member 가져오기
-        Optional<User> user = Optional.of(userCommandService.loginUser(userId));
+        Optional<Customer> user = Optional.of(customerCommandService.loginUser(userId));
 
         // 비번 동일한지 확인(암호화 안한 버전)
         if (!user.get().getPassword().equals(password)) {

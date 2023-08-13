@@ -1,7 +1,7 @@
 package com.potatoes.BloodRecoverycustomerv200.domain.model.aggregates;
 
 
-import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.AddUserCommand;
+import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.CustomerCommand;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 @Table(schema = "User")
-public class User {
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
@@ -56,7 +56,7 @@ public class User {
     @Column(name = "DATE", nullable = false)
     private Date date;
 
-    public User(AddUserCommand command) {
+    public Customer(CustomerCommand command) {
         this.userId = command.getUserId();
         this.name = command.getName();
         this.nickname = command.getNickname();
@@ -71,7 +71,7 @@ public class User {
         this.date = command.getDate();
     }
 
-    public User() {
+    public Customer() {
 
     }
 }

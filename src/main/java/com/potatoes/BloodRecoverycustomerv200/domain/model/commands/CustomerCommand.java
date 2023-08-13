@@ -9,7 +9,7 @@ import java.util.Date;
 @Builder
 @Getter
 @ToString
-public class AddUserCommand {
+public class CustomerCommand {
     private String userId;
     private String name;
     private String nickname;

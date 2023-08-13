@@ -1,15 +1,15 @@
 package com.potatoes.BloodRecoverycustomerv200.application.commandservices;
 
-import com.potatoes.BloodRecoverycustomerv200.domain.model.aggregates.User;
-import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.AddUserCommand;
-import com.potatoes.BloodRecoverycustomerv200.domain.repository.UserRepository;
+import com.potatoes.BloodRecoverycustomerv200.domain.model.aggregates.Customer;
+import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.CustomerCommand;
+import com.potatoes.BloodRecoverycustomerv200.domain.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserCommandService {
-    private final UserRepository userRepository;
+public class CustomerCommandService {
+    private final CustomerRepository customerRepository;
 
     /**
      * 회원 가입
@@ -17,11 +17,11 @@ public class UserCommandService {
      * @param command
      * @return
      */
-    public User addUser(AddUserCommand command) {
+    public Customer addUser(CustomerCommand command) {
 
-        User user = new User(command);
-        userRepository.save(user);
-        return user;
+        Customer customer = new Customer(command);
+        customerRepository.save(customer);
+        return customer;
     }
 
     /**
@@ -31,8 +31,8 @@ public class UserCommandService {
      * @return
      */
     public boolean isDuplicateId(String userId) {
-        User user = userRepository.findByUserId(userId);
-        if (user.getUserId().isEmpty()) {
+        Customer customer = customerRepository.findByUserId(userId);
+        if (customer.getUserId().isEmpty()) {
             return true;
         }
         return false;
@@ -45,8 +45,8 @@ public class UserCommandService {
      * @return
      */
     public boolean isDuplicateNickname(String nickname) {
-        User user = userRepository.findByNickname(nickname);
-        if (user.getNickname().isEmpty()) {
+        Customer customer = customerRepository.findByNickname(nickname);
+        if (customer.getNickname().isEmpty()) {
             return true;
         }
         return false;
@@ -59,18 +59,20 @@ public class UserCommandService {
      *
      * @param userId
      */
-    public User loginUser(String userId) {
-        User user = userRepository.findByUserId(userId);
+    public Customer loginUser(String userId) {
+        Customer customer = customerRepository.findByUserId(userId);
 
         // validation
-        if (user.getUserId().equals(null)) {
+        if (customer.getUserId().equals(null)) {
             try {
+
+
                 throw new Exception(userId);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return user;
+        return customer;
     }
 
 }

@@ -1,9 +1,8 @@
-package com.potatoes.BloodRecoverycustomerv200.interfaces.rest.validation;
+package com.potatoes.BloodRecoverycustomerv200.infrastructure.twilio;
 
-import com.twilio.Twilio;
 import com.twilio.rest.verify.v2.Service;
 
-public class TwilioValidation {
+public class Twilio {
     // Install the Java helper library from twilio.com/docs/java/install
 
     // Find your Account SID and Auth Token at twilio.com/console
@@ -12,7 +11,7 @@ public class TwilioValidation {
     public static final String AUTH_TOKEN = System.getenv("24ec56404bb097e764907f670c57e5e5");
 
     public static void main(String[] args) {
-        Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+        com.twilio.Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
         Service service = Service.creator("My First Verify Service").create();
 
         System.out.println(service.getSid());
