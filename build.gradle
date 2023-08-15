@@ -65,6 +65,9 @@ dependencies {
 	// twilio
 	implementation group: "com.twilio.sdk", name: "twilio", version: "7.42.0"
 
+	// https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-aws
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.1.RELEASE'
+
 }
 
 tasks.named('test') {
