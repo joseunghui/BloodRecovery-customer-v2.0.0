@@ -14,6 +14,8 @@ public class CustomerWebUrl {
     // 닉네임 중복체크
     public static final String USER_NICK_CHECK = "/check/nickname";
 
+    public static final String USER_PERSONAL_CHECK = "/check/personal";
+
     // 로그인
     public static final String USER_LOGIN = "/login";
 

@@ -86,7 +86,27 @@ public class CustomerController extends BaseController {
         );
     }
 
-    //TODO 실명인증 API 갖고와서 적용시키고 회원가입 개발 완료 해야함
+    /**
+     * 실명 인증용 SMS 번호 발송 확인
+     *
+     * @param phone
+     * @param inputMessage
+     * @return
+     */
+    @PostMapping(USER_PERSONAL_CHECK)
+    public ResponseEntity<Object> isValidPersonalNumber(
+            @Validated @RequestParam String phone, @RequestParam String inputMessage) {
+
+        // SMS 실명 인증
+        CustomerValidation valid = CustomerValidation.builder()
+                .isValid(customerCommandService.isValidPersonalNumber(phone, inputMessage)).build();
+
+        return new ResponseEntity<>(
+                valid,
+                getSuccessHeader(),
+                HttpStatus.OK
+        );
+    }
 
     /**
      * 일반 로그인

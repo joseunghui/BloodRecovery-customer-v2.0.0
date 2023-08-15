@@ -6,6 +6,8 @@ import com.potatoes.BloodRecoverycustomerv200.domain.repository.CustomerReposito
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static com.potatoes.BloodRecoverycustomerv200.infrastructure.twilio.SendSMSTwilio.sendMessage;
+
 @Service
 @RequiredArgsConstructor
 public class CustomerCommandService {
@@ -52,6 +54,21 @@ public class CustomerCommandService {
         return false;
     }
 
+    /**
+     * 실명 인증용 SMS 번호 발송 확인
+     *
+     * @param phone
+     * @param inputMessage
+     * @return
+     */
+    public boolean isValidPersonalNumber(String phone, String inputMessage) {
+        String sentMessage = String.valueOf(sendMessage(phone));
+
+        if (sentMessage.equals(inputMessage)) {
+            return true;
+        }
+        return false;
+    }
 
 
     /**
