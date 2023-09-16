@@ -39,6 +39,7 @@ class CustomerCommandServiceTest {
         Customer actualCustomer = customerCommandService.addNewCustomer(cmd);
 
         //then
+        // assertThat(actualCustomer).isEqualTo(customer);
         assertAll(
                 () -> assertThat(actualCustomer.getUserId()).isEqualTo(customer.getUserId()),
                 () -> assertThat(actualCustomer.getName()).isEqualTo(customer.getName()),
@@ -54,4 +55,28 @@ class CustomerCommandServiceTest {
         );
     }
 
+    @Test
+    @DisplayName("중복된 회원이 아님을 확인한다.")
+    void isDuplicateId() {
+    }
+
+    @Test
+    @DisplayName("중복된 닉네임이 아님을 확인한다.")
+    void isDuplicateNickname() {
+    }
+
+    @Test
+    @DisplayName("정상적으로 실명 인증을 완료한다.")
+    void isValidPersonalNumber() {
+    }
+
+    @Test
+    @DisplayName("정상적으로 로그인을 성공한다.")
+    void loginUser() {
+    }
+
+    @Test
+    @DisplayName("정상적으로 회원 정보를 가져온다.")
+    void getCustomerInfo() {
+    }
 }
