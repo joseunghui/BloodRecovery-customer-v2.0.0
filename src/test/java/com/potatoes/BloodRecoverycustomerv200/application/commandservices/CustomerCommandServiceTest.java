@@ -1,5 +1,8 @@
 package com.potatoes.BloodRecoverycustomerv200.application.commandservices;
 
+import com.potatoes.BloodRecoverycustomerv200.application.testutil.TestData;
+import com.potatoes.BloodRecoverycustomerv200.domain.model.aggregates.Customer;
+import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.CustomerCommand;
 import com.potatoes.BloodRecoverycustomerv200.domain.repository.CustomerRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,10 +11,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+
 
 @ExtendWith(MockitoExtension.class)
 class CustomerCommandServiceTest {
-
     @InjectMocks
     private CustomerCommandService customerCommandService;
 
@@ -19,21 +26,32 @@ class CustomerCommandServiceTest {
     private CustomerRepository customerRepository;
 
     @Test
-    @DisplayName("회원 가입 테스트")
+    @DisplayName("정상적으로 회원을 생성한다.")
     public void addCustomerTest() {
 
-        // given
+        //given
+        CustomerCommand cmd = TestData.mockAddCustomerCommand;
+        Customer customer = TestData.mockCustomer;
 
+        given(customerRepository.findByUserId(anyString())).willReturn(customer);
 
-        // when
-
+        //when
+        Customer actualCustomer = customerCommandService.addNewCustomer(cmd);
 
         //then
-        //Assertions.assertEquals();
+        assertAll(
+                () -> assertThat(actualCustomer.getUserId()).isEqualTo(customer.getUserId()),
+                () -> assertThat(actualCustomer.getName()).isEqualTo(customer.getName()),
+                () -> assertThat(actualCustomer.getNickname()).isEqualTo(customer.getNickname()),
+                () -> assertThat(actualCustomer.getBldTp()).isEqualTo(customer.getBldTp()),
+                () -> assertThat(actualCustomer.getAddress()).isEqualTo(customer.getAddress()),
+                () -> assertThat(actualCustomer.getEmail()).isEqualTo(customer.getEmail()),
+                () -> assertThat(actualCustomer.getPhone()).isEqualTo(customer.getPhone()),
+                () -> assertThat(actualCustomer.getFileNm()).isEqualTo(customer.getFileNm()),
+                () -> assertThat(actualCustomer.getGradeSn()).isEqualTo(customer.getGradeSn()),
+                () -> assertThat(actualCustomer.getUserStatus()).isEqualTo(customer.getUserStatus()),
+                () -> assertThat(actualCustomer.getDate()).isEqualTo(customer.getDate())
+        );
     }
-
-
-
-
 
 }
