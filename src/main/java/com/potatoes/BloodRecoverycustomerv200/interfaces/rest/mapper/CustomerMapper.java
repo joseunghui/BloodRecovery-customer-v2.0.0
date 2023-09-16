@@ -22,8 +22,8 @@ public abstract class CustomerMapper {
     // 회원 가입 처리 전에 비밀번호 암호화 상태로 DB 저장
     @Transactional
     @BeforeMapping
-    public String getPasswordEncoding(CustomerCommand command) {
-        return encoder.encode(command.getPassword());
+    public String getPasswordEncoding(@MappingTarget final CustomerFormDto dto) {
+        return encoder.encode(dto.getPassword());
     }
 
     @AfterMapping

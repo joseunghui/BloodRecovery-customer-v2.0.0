@@ -1,5 +1,6 @@
 package com.potatoes.BloodRecoverycustomerv200.interfaces.rest.controller;
 
+import com.amazonaws.services.kms.model.NotFoundException;
 import com.potatoes.BloodRecoverycustomerv200.application.commandservices.CustomerCommandService;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.aggregates.Customer;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.CustomerCommand;
@@ -119,16 +120,17 @@ public class CustomerController extends BaseController {
     public ResponseEntity<String> loginUser(
             @RequestParam String userId, @RequestParam String password) {
 
-        // 해당 회원 username 값으로 Member 가져오기
-        Optional<Customer> user = Optional.of(customerCommandService.loginUser(userId));
+        try {
+            // 해당 회원 username 값으로 Member 가져오기
+            Optional<Customer> user = Optional.of(customerCommandService.loginUser(userId, password));
 
-        // 비번 동일한지 확인(암호화 안한 버전)
-        if (!user.get().getPassword().equals(password)) {
-            try {
-                throw new Exception(userId);
-            } catch (Exception e) {
-                e.printStackTrace();
+            // 비번 동일한지 확인(암호화 안한 버전)
+            if (user.isEmpty()) {
+                throw new NotFoundException("일치하는 회원 정보가 없습니다.");
             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return new ResponseEntity<>(

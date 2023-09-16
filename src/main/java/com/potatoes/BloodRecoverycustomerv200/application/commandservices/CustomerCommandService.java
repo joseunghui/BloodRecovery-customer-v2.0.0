@@ -1,9 +1,11 @@
 package com.potatoes.BloodRecoverycustomerv200.application.commandservices;
 
+import com.amazonaws.services.kms.model.NotFoundException;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.aggregates.Customer;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.CustomerCommand;
 import com.potatoes.BloodRecoverycustomerv200.domain.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import static com.potatoes.BloodRecoverycustomerv200.infrastructure.twilio.SendSMSTwilio.sendMessage;
@@ -12,6 +14,9 @@ import static com.potatoes.BloodRecoverycustomerv200.infrastructure.twilio.SendS
 @RequiredArgsConstructor
 public class CustomerCommandService {
     private final CustomerRepository customerRepository;
+
+    // 암호화 security
+    private BCryptPasswordEncoder encoder;
 
     /**
      * 회원 가입
@@ -76,20 +81,22 @@ public class CustomerCommandService {
      *
      * @param userId
      */
-    public Customer loginUser(String userId) {
+    public Customer loginUser(String userId, String password) {
+        // 아이디로 회원 정보 가져오기
         Customer customer = customerRepository.findByUserId(userId);
 
         // validation
-        if (customer.getUserId().equals(null)) {
+        if (customer.getUserId().equals(userId)) {
             try {
-
-
-                throw new Exception(userId);
+                // 입력한 비밀번호와 DB 비밀번호가 동일한지 확인
+                if (customer.getPassword().equals(encoder.encode(password))) {
+                    return customer;
+                } else throw new SecurityException("비밀번호가 일치하지 않습니다.");
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        return customer;
+        } else throw new NotFoundException("가입된 회원이 아닙니다.");
+        return null;
     }
 
 }
