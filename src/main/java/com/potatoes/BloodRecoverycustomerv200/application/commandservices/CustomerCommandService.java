@@ -24,7 +24,7 @@ public class CustomerCommandService {
      * @param command
      * @return
      */
-    public Customer addUser(CustomerCommand command) {
+    public Customer addNewCustomer(CustomerCommand command) {
 
         Customer customer = new Customer(command);
         customerRepository.save(customer);
@@ -99,4 +99,14 @@ public class CustomerCommandService {
         return null;
     }
 
+    /**
+     * 회원 정보 상세 보기 (마이페이지)
+     *
+     * @param userId
+     * @return
+     */
+    public Customer getCustomerInfo(String userId) {
+        Customer customer = customerRepository.findByUserId(userId);
+        return customer;
+    }
 }

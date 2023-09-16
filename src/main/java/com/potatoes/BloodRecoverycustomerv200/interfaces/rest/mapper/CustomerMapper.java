@@ -17,7 +17,13 @@ public abstract class CustomerMapper {
     // 암호화 Security
     private BCryptPasswordEncoder encoder;
 
-    public abstract CustomerCommand dtoToCommand(CustomerFormDto form);
+    public abstract CustomerCommand addNewCustomerDtoToCommand(CustomerFormDto form);
+
+    @AfterMapping
+    protected void afterMappingToCommand(
+            @MappingTarget final CustomerCommand.CustomerCommandBuilder targetBuilder,
+            CustomerFormDto dto) {
+    }
 
     // 회원 가입 처리 전에 비밀번호 암호화 상태로 DB 저장
     @Transactional
@@ -26,10 +32,6 @@ public abstract class CustomerMapper {
         return encoder.encode(dto.getPassword());
     }
 
-    @AfterMapping
-    protected void afterMappingToCommand(
-            @MappingTarget final CustomerCommand.CustomerCommandBuilder targetBuilder,
-            CustomerFormDto dto) {
-    }
+
 
 }

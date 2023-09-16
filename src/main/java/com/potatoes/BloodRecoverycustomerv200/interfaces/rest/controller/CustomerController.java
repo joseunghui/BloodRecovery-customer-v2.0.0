@@ -32,12 +32,12 @@ public class CustomerController extends BaseController {
      * @return
      */
     @PostMapping(USER_ADD)
-    public ResponseEntity<Object> addUser(
+    public ResponseEntity<Object> addNewCustomer(
             @Validated @RequestBody CustomerFormDto form) {
 
         // 회원가입 (신규 등록)
-        CustomerCommand command = customerMapper.dtoToCommand(form);
-        customerCommandService.addUser(command);
+        CustomerCommand command = customerMapper.addNewCustomerDtoToCommand(form);
+        customerCommandService.addNewCustomer(command);
 
         return new ResponseEntity<>(
                 getSuccessHeader(),
@@ -117,15 +117,15 @@ public class CustomerController extends BaseController {
      * @return
      */
     @GetMapping(USER_LOGIN)
-    public ResponseEntity<String> loginUser(
+    public ResponseEntity<String> loginCustomer(
             @RequestParam String userId, @RequestParam String password) {
 
         try {
             // 해당 회원 username 값으로 Member 가져오기
-            Optional<Customer> user = Optional.of(customerCommandService.loginUser(userId, password));
+            Optional<Customer> passLoginUserInfo = Optional.of(customerCommandService.loginUser(userId, password));
 
             // 비번 동일한지 확인(암호화 안한 버전)
-            if (user.isEmpty()) {
+            if (passLoginUserInfo.isEmpty()) {
                 throw new NotFoundException("일치하는 회원 정보가 없습니다.");
             }
 
@@ -142,5 +142,32 @@ public class CustomerController extends BaseController {
     //TODO Social 로그인 기능 추가해야함
 
 
+    /**
+     * 회원 정보 상세 보기 (마이페이지)
+     *
+     * @param userId
+     * @return
+     */
+    @GetMapping(USER_EDIT)
+    public ResponseEntity<Object> getCustomerInfo(@RequestParam String userId) {
+
+        // 회원정보 가져오기
+        Optional<Customer> getCustomerInfo = Optional.of(customerCommandService.getCustomerInfo(userId));
+
+        return new ResponseEntity<>(
+                getSuccessHeader(),
+                HttpStatus.OK
+        );
+    }
+
+    @PostMapping(USER_EDIT)
+    public ResponseEntity<Object> editCustomerInfo(@Validated @RequestBody CustomerFormDto form) {
+        //TODO 회원정보수정 API 작성
+
+        return new ResponseEntity<>(
+                getSuccessHeader(),
+                HttpStatus.OK
+        );
+    }
 
 }
