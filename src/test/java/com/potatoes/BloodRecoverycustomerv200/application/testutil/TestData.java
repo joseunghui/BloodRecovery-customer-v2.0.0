@@ -8,20 +8,19 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.Date;
 
 public class TestData {
-    private static BCryptPasswordEncoder encoder;
 
     public static CustomerFormDto mockAddMemberFormDto = CustomerFormDto.builder()
-            .userId("")
-            .name("")
-            .nickname("")
-            .password(encoder.encode(""))
-            .bldTp("")
-            .address("")
-            .email("")
-            .phone("")
-            .fileNm("")
-            .gradeSn("")
-            .userStatus("")
+            .userId("exampleId")
+            .name("김예시")
+            .nickname("samplenickname")
+            .password("password1@")
+            .bldTp("RH-A")
+            .address("서울 중구 432-6")
+            .email("example@gmail.com")
+            .phone("010-9346-2991")
+            .fileNm("sample.jpg")
+            .gradeSn("BASIC")
+            .userStatus("VALID")
             .date(new Date())
             .build();
 
@@ -41,10 +40,6 @@ public class TestData {
             .build();
 
     public static Customer mockCustomer = new Customer(mockAddCustomerCommand);
-
-    public static String MockCustomerFormString = "memberId=test123&password=!23Qwe&name=테스터&phone=010-1234-5678&birth=2000-01-01&email=aaa@gmail.com&gender=male&city=서울&street=성수1가&zipcode=12345";
-
-
 
 
 }

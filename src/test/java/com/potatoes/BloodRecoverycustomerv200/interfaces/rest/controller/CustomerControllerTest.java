@@ -23,32 +23,4 @@ class CustomerControllerTest {
     private CustomerRepository customerRepository;
 
 
-    @Test
-    @DisplayName("")
-    void addNewCustomerControllerTest() {
-    }
-
-    @Test
-    void isDuplicateIdControllerTest() {
-    }
-
-    @Test
-    void isDuplicateNicknameControllerTest() {
-    }
-
-    @Test
-    void isValidPersonalNumberControllerTest() {
-    }
-
-    @Test
-    void loginCustomerControllerTest() {
-    }
-
-    @Test
-    void getCustomerInfoControllerTest() {
-    }
-
-    @Test
-    void editCustomerInfoControllerTest() {
-    }
 }

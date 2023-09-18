@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.potatoes'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+sourceCompatibility = '1.8'
 
 ext {
 	lombokVersion = '1.18.22'
@@ -42,10 +42,12 @@ dependencies {
 	implementation 'org.springframework.security:spring-security-config:5.6.3'
 	implementation 'org.springframework.security:spring-security-web:5.7.7'
 
-	//Junit5
-	testImplementation ('org.springframework.boot:spring-boot-starter-test') {
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	//JUnit4 추가
+	testImplementation("org.junit.vintage:junit-vintage-engine") {
+		exclude group: "org.hamcrest", module: "hamcrest-core"
 	}
+	testImplementation 'org.mockito:mockito-core:2.7.22'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -65,11 +67,12 @@ dependencies {
 	// twilio
 	implementation group: "com.twilio.sdk", name: "twilio", version: "7.42.0"
 
-	// https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-aws
-	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.1.RELEASE'
-
 }
 
-tasks.named('test') {
+test {
 	useJUnitPlatform()
+}
+
+jar {
+	enabled = false
 }

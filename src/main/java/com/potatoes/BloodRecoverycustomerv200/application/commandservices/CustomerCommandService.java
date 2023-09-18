@@ -1,6 +1,5 @@
 package com.potatoes.BloodRecoverycustomerv200.application.commandservices;
 
-import com.amazonaws.services.kms.model.NotFoundException;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.aggregates.Customer;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.CustomerCommand;
 import com.potatoes.BloodRecoverycustomerv200.domain.repository.CustomerRepository;
@@ -95,7 +94,7 @@ public class CustomerCommandService {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else throw new NotFoundException("가입된 회원이 아닙니다.");
+        } else throw new NullPointerException("가입된 회원이 아닙니다.");
         return null;
     }
 
