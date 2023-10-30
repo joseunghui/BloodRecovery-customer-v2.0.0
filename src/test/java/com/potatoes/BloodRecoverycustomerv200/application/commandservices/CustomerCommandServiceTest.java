@@ -47,8 +47,6 @@ public class CustomerCommandServiceTest {
 //                () -> assertThat(actualCustomer.getUserId()).isEqualTo(customer.getUserId()),
 //                () -> assertThat(actualCustomer.getName()).isEqualTo(customer.getName()),
 //                () -> assertThat(actualCustomer.getNickname()).isEqualTo(customer.getNickname()),
-//                () -> assertThat(actualCustomer.getBldTp()).isEqualTo(customer.getBldTp()),
-//                () -> assertThat(actualCustomer.getAddress()).isEqualTo(customer.getAddress()),
 //                () -> assertThat(actualCustomer.getEmail()).isEqualTo(customer.getEmail()),
 //                () -> assertThat(actualCustomer.getPhone()).isEqualTo(customer.getPhone()),
 //                () -> assertThat(actualCustomer.getFileNm()).isEqualTo(customer.getFileNm()),

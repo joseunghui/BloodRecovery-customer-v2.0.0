@@ -34,8 +34,8 @@ public class SendSMSTwilio {
         Message msg = Message.creator(
                 // to
                 new PhoneNumber(targetPhone),
-                // from TODO twilio console 에서 받은 번호 넣어야 함
-                new PhoneNumber(""),
+                // from
+                new PhoneNumber("+16179970580"),
                 message).create();
 
         return authNumber;

@@ -32,12 +32,6 @@ public class Customer {
     @Column(name = "PASSWORD", nullable = false)
     private String password;
 
-    @Column(name = "BLD_TP", nullable = false)
-    private String bldTp;
-
-    @Column(name = "ADDRESS", nullable = false)
-    private String address;
-
     @Column(name = "EMAIL", nullable = false)
     private String email;
 
@@ -61,8 +55,6 @@ public class Customer {
         this.name = command.getName();
         this.nickname = command.getNickname();
         this.password = command.getPassword();
-        this.bldTp = command.getBldTp();
-        this.address = command.getAddress();
         this.email = command.getEmail();
         this.phone = command.getPhone();
         this.fileNm = command.getFileNm();
@@ -71,7 +63,5 @@ public class Customer {
         this.date = command.getDate();
     }
 
-    public Customer() {
 
-    }
 }

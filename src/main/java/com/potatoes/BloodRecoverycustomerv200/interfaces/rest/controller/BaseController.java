@@ -1,14 +1,16 @@
 package com.potatoes.BloodRecoverycustomerv200.interfaces.rest.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 public class BaseController {
 
     // 초기 실행을 위한 페이지 연결
-    @RequestMapping("/home")
+    @RequestMapping("/")
     public String defaultStart() {
         return "실행 성공!";
     }

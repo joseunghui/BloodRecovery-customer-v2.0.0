@@ -30,23 +30,13 @@ public class CustomerFormDto {
 
     @NotBlank(groups = {userValid.class}, message = "비밀번호는 필수 입니다.")
     @NotNull(groups = {userValid.class}, message = "비밀번호는 필수 입니다.")
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d~!@#$%^&*()+|=]{8,20}$") //'숫자', '문자' 무조건 1개 이상, '최소 8자에서 최대 20자' 허용
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d~!@#$%^&*()+|=].{8,20}+$") //'숫자', '문자' 무조건 1개 이상, '최소 8자에서 최대 20자' 허용
     private String password;
 
-    @NotBlank(groups = {userValid.class}, message = "비밀번호는 필수 입니다.")
-    @NotNull(groups = {userValid.class}, message = "비밀번호는 필수 입니다.")
-    private String bldTp;
-
-    @NotBlank(groups = {userValid.class}, message = "비밀번호는 필수 입니다.")
-    @NotNull(groups = {userValid.class}, message = "비밀번호는 필수 입니다.")
-    private String address;
-
-    @NotBlank(groups = {userValid.class}, message = "비밀번호는 필수 입니다.")
-    @NotNull(groups = {userValid.class}, message = "비밀번호는 필수 입니다.")
     private String email;
 
-    @NotBlank(groups = {userValid.class}, message = "비밀번호는 필수 입니다.")
-    @NotNull(groups = {userValid.class}, message = "비밀번호는 필수 입니다.")
+    @NotBlank(groups = {userValid.class}, message = "본인인증용 전화번호는 필수 입니다.")
+    @NotNull(groups = {userValid.class}, message = "본인인증용 전화번호는 필수 입니다.")
     private String phone;
 
     private MultipartFile file;

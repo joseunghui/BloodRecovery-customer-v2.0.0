@@ -14,8 +14,6 @@ public class CustomerCommand {
     private String name;
     private String nickname;
     private String password;
-    private String bldTp;
-    private String address;
     private String email;
     private String phone;
     private String fileNm;
