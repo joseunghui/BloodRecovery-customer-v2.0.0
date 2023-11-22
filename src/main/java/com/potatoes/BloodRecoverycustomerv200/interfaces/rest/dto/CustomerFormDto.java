@@ -16,6 +16,8 @@ import java.util.Date;
 public class CustomerFormDto {
     private interface userValid{ }
 
+    private String cid;
+
     @NotBlank(groups = {userValid.class}, message = "아이디는 필수 입니다.")
     @NotNull(groups = {userValid.class}, message = "아이디는 필수 입니다.")
     private String userId;

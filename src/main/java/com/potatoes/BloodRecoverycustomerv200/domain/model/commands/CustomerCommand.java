@@ -10,6 +10,7 @@ import java.util.Date;
 @Getter
 @ToString
 public class CustomerCommand {
+    private String cid;
     private String userId;
     private String name;
     private String nickname;

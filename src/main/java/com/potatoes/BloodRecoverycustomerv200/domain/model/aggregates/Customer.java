@@ -20,6 +20,9 @@ public class Customer {
     @Column(name = "ID", nullable = false)
     private Long id;
 
+    @Column(name = "CID", nullable = false)
+    private String cid;
+
     @Column(name = "USER_ID", nullable = false)
     private String userId;
 
