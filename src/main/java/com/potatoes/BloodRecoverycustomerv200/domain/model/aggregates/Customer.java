@@ -2,24 +2,24 @@ package com.potatoes.BloodRecoverycustomerv200.domain.model.aggregates;
 
 
 import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.CustomerCommand;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
+import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Getter
-@AllArgsConstructor
-@Builder
+@Getter @Setter
+@NoArgsConstructor
 @Table(schema = "Customer")
 public class Customer {
+    @javax.persistence.Id
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
     private Long id;
 
+    @PrimaryKeyJoinColumn
     @Column(name = "CID", nullable = false)
     private String cid;
 
@@ -65,6 +65,5 @@ public class Customer {
         this.userStatus = command.getUserStatus();
         this.date = command.getDate();
     }
-
 
 }
