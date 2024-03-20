@@ -3,6 +3,8 @@ package com.potatoes.BloodRecoverycustomerv200.application.commandservices;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.aggregates.Customer;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.CustomerCommand;
 import com.potatoes.BloodRecoverycustomerv200.domain.repository.CustomerRepository;
+import com.potatoes.BloodRecoverycustomerv200.domain.service.CustomerService;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,7 +14,7 @@ import static com.potatoes.BloodRecoverycustomerv200.infrastructure.twilio.SendS
 @Service
 @RequiredArgsConstructor
 public class CustomerCommandService {
-    private final CustomerRepository customerRepository;
+    private final CustomerService customerService;
 
     // 암호화 security
     private BCryptPasswordEncoder encoder;
@@ -24,9 +26,8 @@ public class CustomerCommandService {
      * @return
      */
     public Customer addNewCustomer(CustomerCommand command) {
-
         Customer customer = new Customer(command);
-        customerRepository.save(customer);
+        customerService.join(customer);
         return customer;
     }
 
@@ -37,8 +38,7 @@ public class CustomerCommandService {
      * @return
      */
     public boolean isDuplicateId(String userId) {
-        Customer customer = customerRepository.findByUserId(userId);
-        if (customer.getUserId().isEmpty()) {
+        if (customerService.checkDuplicateCustomerUserId(userId)) {
             return true;
         }
         return false;
@@ -51,8 +51,7 @@ public class CustomerCommandService {
      * @return
      */
     public boolean isDuplicateNickname(String nickname) {
-        Customer customer = customerRepository.findByNickname(nickname);
-        if (customer.getNickname().isEmpty()) {
+        if (customerService.checkDuplicateCustomerNickname(nickname)) {
             return true;
         }
         return false;
@@ -82,7 +81,7 @@ public class CustomerCommandService {
      */
     public Customer loginUser(String userId, String password) {
         // 아이디로 회원 정보 가져오기
-        Customer customer = customerRepository.findByUserId(userId);
+        Customer customer = customerService.defaultLogin(userId);
 
         // validation
         if (customer.getUserId().equals(userId)) {
@@ -100,12 +99,11 @@ public class CustomerCommandService {
 
     /**
      * 회원 정보 상세 보기 (마이페이지)
-     *
-     * @param userId
+     * @param cid
      * @return
      */
-    public Customer getCustomerInfo(String userId) {
-        Customer customer = customerRepository.findByUserId(userId);
+    public Customer getCustomerInfo(String cid) {
+        Customer customer = customerService.getMyInfo(cid);
         return customer;
     }
 }

@@ -10,12 +10,12 @@ import com.potatoes.BloodRecoverycustomerv200.infrastructure.twilio.SendSMSTwili
 import com.potatoes.BloodRecoverycustomerv200.interfaces.rest.dto.CustomerFormDto;
 import com.potatoes.BloodRecoverycustomerv200.interfaces.rest.mapper.CustomerMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 import static com.potatoes.BloodRecoverycustomerv200.interfaces.rest.constants.CustomerWebUrl.*;
@@ -36,14 +36,14 @@ public class CustomerController extends BaseController {
      */
     @PostMapping(CUSTOMER_ADD)
     public ResponseEntity<Object> addNewCustomer(
-            @Validated @RequestBody CustomerFormDto form) {
+            @Validated @RequestBody CustomerFormDto form) throws Exception {
 
         // 회원가입 (신규 등록)
         CustomerCommand command = customerMapper.addNewCustomerDtoToCommand(form);
         customerCommandService.addNewCustomer(command);
 
         return new ResponseEntity<>(
-                getSuccessHeader(),
+                getSuccessHeader(command.getCid()),
                 HttpStatus.OK
         );
     }
@@ -64,7 +64,7 @@ public class CustomerController extends BaseController {
 
         return new ResponseEntity<>(
                 valid,
-                getSuccessHeader(),
+                getSuccessHeader(null),
                 HttpStatus.OK
         );
     }
@@ -85,7 +85,7 @@ public class CustomerController extends BaseController {
 
         return new ResponseEntity<>(
                 valid,
-                getSuccessHeader(),
+                getSuccessHeader(null),
                 HttpStatus.OK
         );
     }
@@ -111,7 +111,7 @@ public class CustomerController extends BaseController {
         }
 
         return new ResponseEntity<>(
-                getSuccessHeader(),
+                getSuccessHeader(null),
                 HttpStatus.OK
         );
     }
@@ -134,7 +134,7 @@ public class CustomerController extends BaseController {
 
         return new ResponseEntity<>(
                 valid,
-                getSuccessHeader(),
+                getSuccessHeader(null),
                 HttpStatus.OK
         );
     }
@@ -150,21 +150,16 @@ public class CustomerController extends BaseController {
     public ResponseEntity<String> loginCustomer(
             @RequestParam String userId, @RequestParam String password) {
 
+        String getCustomerCidValue = "";
         try {
             // 해당 회원 username 값으로 Member 가져오기
             Optional<Customer> passLoginUserInfo = Optional.of(customerCommandService.loginUser(userId, password));
-
-            // 비번 동일한지 확인(암호화 안한 버전)
-            if (passLoginUserInfo.equals(null)) {
-                throw new NullPointerException("일치하는 회원 정보가 없습니다.");
-            }
-
+            getCustomerCidValue = passLoginUserInfo.get().getCid();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return new ResponseEntity<>(
-                getSuccessHeader(),
+                getSuccessHeader(getCustomerCidValue),
                 HttpStatus.OK
         );
     }
@@ -174,18 +169,19 @@ public class CustomerController extends BaseController {
 
     /**
      * 회원 정보 상세 보기 (마이페이지)
-     *
-     * @param userId
+     * @param cid
      * @return
      */
     @GetMapping(CUSTOMER_EDIT)
-    public ResponseEntity<Object> getCustomerInfo(@RequestParam String userId) {
+    public ResponseEntity<Object> getCustomerInfo(@RequestHeader("cid") String cid) {
 
-        // 회원정보 가져오기
-        Optional<Customer> getCustomerInfo = Optional.of(customerCommandService.getCustomerInfo(userId));
-
+        try {
+            Optional<Customer> getMyInfo = Optional.of(customerCommandService.getCustomerInfo(cid));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return new ResponseEntity<>(
-                getSuccessHeader(),
+                getSuccessHeader(cid),
                 HttpStatus.OK
         );
     }
@@ -195,7 +191,7 @@ public class CustomerController extends BaseController {
         //TODO 회원정보수정 API 작성
 
         return new ResponseEntity<>(
-                getSuccessHeader(),
+                getSuccessHeader(null),
                 HttpStatus.OK
         );
     }
