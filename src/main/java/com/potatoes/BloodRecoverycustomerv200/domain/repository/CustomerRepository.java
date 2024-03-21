@@ -49,14 +49,22 @@ public class CustomerRepository {
 
     // 닉네임으로 회원 검색
     public List<Customer> findByUserId(String userId) {
-        return entityManager.createQuery("select c from Customer c where c.userId = :userId", Customer.class)
+        return entityManager.createQuery(
+                "select c " +
+                        "from Customer c " +
+                        "where c.userId = :userId",
+                        Customer.class)
                 .setParameter("userId", userId)
                 .getResultList();
     }
     
     // 닉네임으로 회원 검색
     public List<Customer> findByNickname(String nickname) {
-        return entityManager.createQuery("select c from Customer c where c.nickname = :nickname", Customer.class)
+        return entityManager.createQuery(
+                "select c " +
+                        "from Customer c " +
+                        "where c.nickname = :nickname",
+                        Customer.class)
                 .setParameter("nickname", nickname)
                 .getResultList();
     }

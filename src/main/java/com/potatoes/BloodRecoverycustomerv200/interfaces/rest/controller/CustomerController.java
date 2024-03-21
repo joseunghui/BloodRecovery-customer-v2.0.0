@@ -10,9 +10,11 @@ import com.potatoes.BloodRecoverycustomerv200.infrastructure.twilio.SendSMSTwili
 import com.potatoes.BloodRecoverycustomerv200.interfaces.rest.dto.CustomerFormDto;
 import com.potatoes.BloodRecoverycustomerv200.interfaces.rest.mapper.CustomerMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.Banner;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -173,13 +175,11 @@ public class CustomerController extends BaseController {
      * @return
      */
     @GetMapping(CUSTOMER_EDIT)
-    public ResponseEntity<Object> getCustomerInfo(@RequestHeader("cid") String cid) {
+    public ResponseEntity<Object> getCustomerInfo(@RequestHeader("cid") String cid, Model model) {
 
-        try {
-            Optional<Customer> getMyInfo = Optional.of(customerCommandService.getCustomerInfo(cid));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Optional<Customer> getMyInfo = Optional.of(customerCommandService.getCustomerInfo(cid));
+        model.addAttribute("data", getMyInfo);
+
         return new ResponseEntity<>(
                 getSuccessHeader(cid),
                 HttpStatus.OK
