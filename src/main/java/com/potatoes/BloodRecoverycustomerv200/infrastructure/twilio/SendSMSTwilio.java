@@ -1,8 +1,8 @@
 package com.potatoes.BloodRecoverycustomerv200.infrastructure.twilio;
 
 import com.twilio.rest.api.v2010.account.Message;
-import com.twilio.rest.verify.v2.Service;
 import com.twilio.type.PhoneNumber;
+
 
 public class SendSMSTwilio {
     // Install the Java helper library from twilio.com/docs/java/install
@@ -18,7 +18,7 @@ public class SendSMSTwilio {
      * @param phone
      * @return
      */
-    public static int sendMessage(String phone) {
+    public static String sendMessage(String phone) {
         com.twilio.Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
 
         // Math.random() 함수로 6자리 인증번호 생성
@@ -38,7 +38,7 @@ public class SendSMSTwilio {
                 new PhoneNumber("+16179970580"),
                 message).create();
 
-        return authNumber;
+        return String.valueOf(authNumber);
     }
 
     /**

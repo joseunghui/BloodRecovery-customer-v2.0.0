@@ -1,17 +1,17 @@
 package com.potatoes.BloodRecoverycustomerv200.interfaces.rest.controller;
 
-import com.potatoes.BloodRecoverycustomerv200.application.commandservices.CustomerCommandService;
-import com.potatoes.BloodRecoverycustomerv200.config.SHA256Config;
+import com.potatoes.BloodRecoverycustomerv200.application.commandservices.AddCustomerCommandService;
+import com.potatoes.BloodRecoverycustomerv200.application.commandservices.LoginCustomerCommandService;
+import com.potatoes.BloodRecoverycustomerv200.application.commandservices.ModifyCustomerCommandService;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.aggregates.Customer;
-import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.CustomerCommand;
+import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.AddCustomerCommand;
 import com.potatoes.BloodRecoverycustomerv200.enums.auth.CustomerAuthEnum;
 import com.potatoes.BloodRecoverycustomerv200.infrastructure.rest.dto.CustomerValidation;
 import com.potatoes.BloodRecoverycustomerv200.infrastructure.twilio.SendSMSTwilio;
-import com.potatoes.BloodRecoverycustomerv200.interfaces.rest.dto.CustomerFormDto;
-import com.potatoes.BloodRecoverycustomerv200.interfaces.rest.mapper.CustomerMapper;
+import com.potatoes.BloodRecoverycustomerv200.interfaces.rest.dto.AddCustomerFormDto;
+import com.potatoes.BloodRecoverycustomerv200.interfaces.rest.dto.ModifyCustomerFormDto;
+import com.potatoes.BloodRecoverycustomerv200.interfaces.rest.mapper.AddCustomerMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.Banner;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -26,9 +26,11 @@ import static com.potatoes.BloodRecoverycustomerv200.interfaces.rest.constants.C
 @RequiredArgsConstructor
 @RequestMapping(CUSTOMER)
 public class CustomerController extends BaseController {
-    private final CustomerCommandService customerCommandService;
+    private final AddCustomerCommandService addCustomerCommandService;
+    private final LoginCustomerCommandService loginCustomerCommandService;
+    private final ModifyCustomerCommandService modifyCustomerCommandService;
 
-    private final CustomerMapper customerMapper;
+    private final AddCustomerMapper addCustomerMapper;
 
     /**
      * 회원 가입
@@ -38,11 +40,11 @@ public class CustomerController extends BaseController {
      */
     @PostMapping(CUSTOMER_ADD)
     public ResponseEntity<Object> addNewCustomer(
-            @Validated @RequestBody CustomerFormDto form) throws Exception {
+            @Validated @RequestBody AddCustomerFormDto form) throws Exception {
 
         // 회원가입 (신규 등록)
-        CustomerCommand command = customerMapper.addNewCustomerDtoToCommand(form);
-        customerCommandService.addNewCustomer(command);
+        AddCustomerCommand command = addCustomerMapper.addNewCustomerDtoToCommand(form);
+        addCustomerCommandService.addNewCustomer(command);
 
         return new ResponseEntity<>(
                 getSuccessHeader(command.getCid()),
@@ -62,7 +64,7 @@ public class CustomerController extends BaseController {
 
         // 유저 아이디 중복 확인
         CustomerValidation valid = CustomerValidation.builder()
-                .isValid(customerCommandService.isDuplicateId(userId)).build();
+                .isValid(addCustomerCommandService.isDuplicateId(userId)).build();
 
         return new ResponseEntity<>(
                 valid,
@@ -83,7 +85,7 @@ public class CustomerController extends BaseController {
 
         // 닉네임 중복확인
         CustomerValidation valid = CustomerValidation.builder()
-                .isValid(customerCommandService.isDuplicateNickname(nickname)).build();
+                .isValid(addCustomerCommandService.isDuplicateNickname(nickname)).build();
 
         return new ResponseEntity<>(
                 valid,
@@ -99,14 +101,15 @@ public class CustomerController extends BaseController {
      * @param sign
      * @return
      */
-    @PostMapping(CUSTOMER_PERSONAL_CHECK)
+    @PostMapping(CUSTOMER_BEFORE_PERSONAL_CHECK)
     public ResponseEntity<Object> isValidPersonalNumber(
+            @RequestHeader("cid") String cid,
             @Validated @RequestParam String phone,
             @Validated @RequestParam Long sign) {
 
         if (Long.toString(sign).equals(String.valueOf(CustomerAuthEnum.NEW_CUSTOMER))) {
             // SMS 전송
-            SendSMSTwilio.sendMessage(phone);
+            String msg = SendSMSTwilio.sendMessage(phone);
         } else if (Long.toString(sign).equals(String.valueOf(CustomerAuthEnum.OLD_CUSTOMER))) {
             //TODO 입력한 전화번호가 기존 회원 번호와 일치한지 확인하는 로직 작성해야함
 
@@ -132,7 +135,7 @@ public class CustomerController extends BaseController {
 
         // SMS 실명 인증
         CustomerValidation valid = CustomerValidation.builder()
-                .isValid(customerCommandService.isValidPersonalNumber(phone, inputMessage)).build();
+                .isValid(addCustomerCommandService.isValidPersonalNumber(phone, inputMessage)).build();
 
         return new ResponseEntity<>(
                 valid,
@@ -155,7 +158,7 @@ public class CustomerController extends BaseController {
         String getCustomerCidValue = "";
         try {
             // 해당 회원 username 값으로 Member 가져오기
-            Optional<Customer> passLoginUserInfo = Optional.of(customerCommandService.loginUser(userId, password));
+            Optional<Customer> passLoginUserInfo = Optional.of(loginCustomerCommandService.loginUser(userId, password));
             getCustomerCidValue = passLoginUserInfo.get().getCid();
         } catch (Exception e) {
             e.printStackTrace();
@@ -177,7 +180,7 @@ public class CustomerController extends BaseController {
     @GetMapping(CUSTOMER_EDIT)
     public ResponseEntity<Object> getCustomerInfo(@RequestHeader("cid") String cid, Model model) {
 
-        Optional<Customer> getMyInfo = Optional.of(customerCommandService.getCustomerInfo(cid));
+        Optional<Customer> getMyInfo = Optional.of(modifyCustomerCommandService.getCustomerInfo(cid));
         model.addAttribute("data", getMyInfo);
 
         return new ResponseEntity<>(
@@ -187,12 +190,19 @@ public class CustomerController extends BaseController {
     }
 
     @PostMapping(CUSTOMER_EDIT)
-    public ResponseEntity<Object> editCustomerInfo(@Validated @RequestBody CustomerFormDto form) {
+    public ResponseEntity<Object> editCustomerInfo(@Validated @RequestBody ModifyCustomerFormDto form) {
         //TODO 회원정보수정 API 작성
 
         return new ResponseEntity<>(
                 getSuccessHeader(null),
                 HttpStatus.OK
+        );
+    }
+
+    ResponseEntity<?> setReturnEntity(HttpStatus status, Optional<?> value) {
+        return new ResponseEntity<>(
+                getSuccessHeader(String.valueOf(value)),
+                status.is2xxSuccessful() ? HttpStatus.OK : HttpStatus.resolve(status.value())
         );
     }
 

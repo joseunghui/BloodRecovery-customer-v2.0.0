@@ -1,7 +1,8 @@
 package com.potatoes.BloodRecoverycustomerv200.domain.model.aggregates;
 
 
-import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.CustomerCommand;
+import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.AddCustomerCommand;
+import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.ModifyCustomerCommand;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 
@@ -9,11 +10,12 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Getter @Setter
-@NoArgsConstructor
+@Getter
+@AllArgsConstructor
+@Builder
 @Table(schema = "Customer")
 public class Customer {
-    @javax.persistence.Id
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
@@ -53,17 +55,25 @@ public class Customer {
     @Column(name = "DATE", nullable = false)
     private Date date;
 
-    public Customer(CustomerCommand command) {
+    // 가입
+    public Customer(AddCustomerCommand command) {
+        this.cid = command.getCid();
         this.userId = command.getUserId();
         this.name = command.getName();
         this.nickname = command.getNickname();
         this.password = command.getPassword();
         this.email = command.getEmail();
         this.phone = command.getPhone();
+    }
+
+    // 수정
+    public  Customer(ModifyCustomerCommand command) {
+        this.password = command.getPassword();
+        this.nickname = command.getNickname();
+        this.email = command.getEmail();
+        this.phone = command.getPhone();
         this.fileNm = command.getFileNm();
-        this.gradeSn = command.getGradeSn();
         this.userStatus = command.getUserStatus();
-        this.date = command.getDate();
     }
 
 }

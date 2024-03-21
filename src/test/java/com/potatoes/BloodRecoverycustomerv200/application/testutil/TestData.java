@@ -1,15 +1,14 @@
 package com.potatoes.BloodRecoverycustomerv200.application.testutil;
 
 import com.potatoes.BloodRecoverycustomerv200.domain.model.aggregates.Customer;
-import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.CustomerCommand;
-import com.potatoes.BloodRecoverycustomerv200.interfaces.rest.dto.CustomerFormDto;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.AddCustomerCommand;
+import com.potatoes.BloodRecoverycustomerv200.interfaces.rest.dto.AddCustomerFormDto;
 
 import java.util.Date;
 
 public class TestData {
 
-    public static CustomerFormDto mockAddMemberFormDto = CustomerFormDto.builder()
+    public static AddCustomerFormDto mockAddMemberFormDto = AddCustomerFormDto.builder()
             .userId("exampleId")
             .name("김예시")
             .nickname("samplenickname")
@@ -22,17 +21,13 @@ public class TestData {
             .date(new Date())
             .build();
 
-    public static CustomerCommand mockAddCustomerCommand = CustomerCommand.builder()
+    public static AddCustomerCommand mockAddCustomerCommand = AddCustomerCommand.builder()
             .userId(mockAddMemberFormDto.getUserId())
             .name(mockAddMemberFormDto.getName())
             .nickname(mockAddMemberFormDto.getNickname())
             .password(mockAddMemberFormDto.getPassword())
             .email(mockAddMemberFormDto.getEmail())
             .phone(mockAddMemberFormDto.getPhone())
-            .fileNm(mockAddMemberFormDto.getFileNm())
-            .gradeSn(mockAddMemberFormDto.getGradeSn())
-            .userStatus(mockAddMemberFormDto.getUserStatus())
-            .date(mockAddMemberFormDto.getDate())
             .build();
 
     public static Customer mockCustomer = new Customer(mockAddCustomerCommand);

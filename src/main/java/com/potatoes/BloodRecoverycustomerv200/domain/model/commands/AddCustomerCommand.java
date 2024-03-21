@@ -9,7 +9,7 @@ import java.util.Date;
 @Builder
 @Getter
 @ToString
-public class CustomerCommand {
+public class AddCustomerCommand {
     private String cid;
     private String userId;
     private String name;
@@ -17,8 +17,5 @@ public class CustomerCommand {
     private String password;
     private String email;
     private String phone;
-    private String fileNm;
-    private String gradeSn;
-    private String userStatus;
     private Date date;
 }

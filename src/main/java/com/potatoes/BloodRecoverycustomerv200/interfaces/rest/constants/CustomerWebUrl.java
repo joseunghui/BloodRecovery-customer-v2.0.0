@@ -14,8 +14,8 @@ public class CustomerWebUrl {
     // 닉네임 중복체크
     public static final String CUSTOMER_NICK_CHECK = "/check/nickname";
 
-    // 실명인증 문자 전송
-    public static final String CUSTOMER_SEND_SMS = "/send/sms";
+    // 실명인증 문자 전송 전 확인
+    public static final String CUSTOMER_BEFORE_PERSONAL_CHECK = "/user/before/check/personal";
 
     // 실명인증 문자 획인
     public static final String CUSTOMER_PERSONAL_CHECK = "/check/personal";
