@@ -2,8 +2,10 @@ package com.potatoes.BloodRecoverycustomerv200.domain.model.aggregates;
 
 
 import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.AddCustomerCommand;
+import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.LoginCustomerCommand;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.ModifyCustomerCommand;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
@@ -13,6 +15,7 @@ import java.util.Date;
 @Getter
 @AllArgsConstructor
 @Builder
+@DynamicUpdate
 @Table(schema = "Customer")
 public class Customer {
 
@@ -66,14 +69,19 @@ public class Customer {
         this.phone = command.getPhone();
     }
 
+    // 로그인
+    public Customer(LoginCustomerCommand command) {
+        this.userId = command.getUserId();
+        this.password = command.getPassword();
+    }
+
     // 수정
     public  Customer(ModifyCustomerCommand command) {
-        this.password = command.getPassword();
+        this.cid = command.getCid();
         this.nickname = command.getNickname();
         this.email = command.getEmail();
         this.phone = command.getPhone();
         this.fileNm = command.getFileNm();
-        this.userStatus = command.getUserStatus();
     }
 
 }

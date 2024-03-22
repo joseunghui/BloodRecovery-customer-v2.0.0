@@ -1,5 +1,7 @@
 package com.potatoes.BloodRecoverycustomerv200.infrastructure.twilio;
 
+import com.potatoes.BloodRecoverycustomerv200.infrastructure.rest.dto.CustomerPhoneNumberValidation;
+import com.potatoes.BloodRecoverycustomerv200.infrastructure.rest.dto.CustomerValidation;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 
@@ -18,7 +20,7 @@ public class SendSMSTwilio {
      * @param phone
      * @return
      */
-    public static String sendMessage(String phone) {
+    public static void sendMessage(String phone) {
         com.twilio.Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
 
         // Math.random() 함수로 6자리 인증번호 생성
@@ -28,7 +30,7 @@ public class SendSMSTwilio {
         String targetPhone = "+82" + phone;
 
         // 전송할 메시지
-        String message = "[피로회복]\n본인 확인을 위해 인증 번호\n[" + targetPhone + "]를 입력해주세요!";
+        String message = "[피로회복]\n본인 확인을 위해 인증 번호\n[" + authNumber + "]를 입력해주세요!";
 
         // 대상 단말기에 본인인증용 메시지 전송
         Message msg = Message.creator(
@@ -38,7 +40,11 @@ public class SendSMSTwilio {
                 new PhoneNumber("+16179970580"),
                 message).create();
 
-        return String.valueOf(authNumber);
+        if (msg.getStatus().equals("")) {
+            CustomerPhoneNumberValidation val
+                    = CustomerPhoneNumberValidation.builder().build();
+            val.setCustomerPhoneNumberValidation(String.valueOf(authNumber), phone);
+        }
     }
 
     /**

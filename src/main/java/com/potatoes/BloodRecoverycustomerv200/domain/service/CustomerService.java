@@ -7,11 +7,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true) // 조회 기능 사용 시 성능 최적화
 @RequiredArgsConstructor // 의존관계 주입을 이 방법으로 사용. 코드 깔끔!
 public class CustomerService {
+
     private final CustomerRepository customerRepository;
 
     /**
@@ -19,56 +21,70 @@ public class CustomerService {
      * @param customer
      * @return
      */
-    @Transactional // 기본적으로 Transaction 안에서 데이터를 변경하는 것은 @Transactional 이 꼭 필요!(기본은 readOnly = false 임)
     public String join(Customer customer) {
-        customerRepository.save(customer);
-        return customer.getCid();
+        customerRepository.findCustomerByCid(customer.getCid()).ifPresent( m -> {
+            throw new IllegalStateException("이미 존재하는 회원 입니다.");
+        });
+        return customerRepository.save(customer).getCid();
     }
 
     // 중복 회원 검사
-    @Transactional
     public boolean checkDuplicateCustomerUserId(String userId) {
-        return validateDuplicateCustomerUserId(userId);
+        customerRepository.findCustomerByUserId(userId).ifPresent(m -> {
+            throw new IllegalStateException("이미 존재하는 회원 입니다.");
+        });
+        return true;
     }
 
-    @Transactional
     public boolean checkDuplicateCustomerNickname(String nickname) {
-        return validateDuplicateCustomerNickname(nickname);
+        customerRepository.findCustomerByNickname(nickname).ifPresent(m -> {
+            throw new IllegalStateException("이미 존재하는 회원 입니다.");
+        });
+        return true;
     }
 
     /**
      * 일반 로그인
-     * @param userId
+     * @param customer
      * @return
      */
-    @Transactional
-    public Customer defaultLogin(String userId) {
-        return customerRepository.defaultLogin(userId);
+    public Customer defaultLogin(Customer customer) {
+
+        Optional<Customer> result = customerRepository.findCustomerByUserId(customer.getUserId());
+        
+        // 검증 -> 존재하지 않는 아이디
+        if (!result.isPresent()) {
+            throw new IllegalStateException("가입된 회원이 아닙니다.");
+        } else {
+            if (!customer.getPassword().equals(result.get().getPassword()))
+                throw new IllegalStateException("비밀번호가 틀렸습니다.");
+        }
+        return result.get();
     }
 
-    @Transactional
     public Customer getMyInfo(String cid) {
-        return  customerRepository.getMyInfo(cid);
+        return customerRepository.findCustomerByCid(cid).get();
+    }
+
+    public Customer updateMyInfo(Customer customer) {
+
+        // customerRepository.updateMyInfo(customer);
+        // return getMyInfo(customer.getCid());
+
+        // 여기서 member는 변경 전 회원 정보
+        Optional<Customer> beforeData = customerRepository.findCustomerByCid(customer.getCid());
+
+        // 검증 2 -> 회원 아이디는 변경 불가
+        if (!beforeData.get().getUserId().equals(customer.getUserId())) {
+            throw new IllegalStateException("오류가 발생했습니다.");
+        } else {
+            // 회원 아이디가 동일하다면 회원 정보 변경
+
+        }
+
+        return null;
     }
 
 
-    /**
-     * 중복 회원 검사
-     * @param userId
-     * @return
-     */
-    private boolean validateDuplicateCustomerUserId(String userId) {
 
-        List<Customer> findMembersByUserId = customerRepository.findByUserId(userId);
-        if (!findMembersByUserId.isEmpty()) {
-            throw new IllegalStateException("이미 존재하는 회원 아이디 입니다.");
-        } else return true;
-    }
-
-    private boolean validateDuplicateCustomerNickname(String nickname) {
-        List<Customer> findMembersByUserNickname = customerRepository.findByNickname(nickname);
-        if (!findMembersByUserNickname.isEmpty()) {
-            throw new IllegalStateException("이미 존재하는 회원 닉네임 입니다.");
-        } else return true;
-    }
 }

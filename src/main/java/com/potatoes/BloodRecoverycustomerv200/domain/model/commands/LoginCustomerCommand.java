@@ -7,10 +7,8 @@ import lombok.ToString;
 @Builder
 @Getter
 @ToString
-public class ModifyCustomerCommand {
-    private String cid;
-    private String nickname;
-    private String email;
-    private String phone;
-    private String fileNm;
+public class LoginCustomerCommand {
+    private String userId;
+    private String name;
+    private String password;
 }

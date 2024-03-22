@@ -14,14 +14,15 @@ import javax.validation.constraints.Pattern;
 public class ModifyCustomerFormDto {
     private interface userValid{ }
 
-    @NotBlank(groups = {userValid.class}, message = "비밀번호는 필수 입니다.")
-    @NotNull(groups = {userValid.class}, message = "비밀번호는 필수 입니다.")
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d~!@#$%^&*()+|=].{8,20}+$") //'숫자', '문자' 무조건 1개 이상, '최소 8자에서 최대 20자' 허용
-    private String password;
+    private String cid;
 
     @NotBlank(groups = {userValid.class}, message = "닉네임은 필수입니다.")
     @NotNull(groups = {userValid.class}, message = "닉네임은 필수입니다.")
     private String nickname;
+
+    @NotBlank(groups = {userValid.class}, message = "닉네임 중복 확인은 필수입니다.")
+    @NotNull(groups = {userValid.class}, message = "닉네임 중복 확인은 필수입니다.")
+    private boolean IsCorrectNickname;
 
     private String email;
 
@@ -31,6 +32,4 @@ public class ModifyCustomerFormDto {
     private String phone;
 
     private String fileNm;
-
-    private String userStatus;
 }

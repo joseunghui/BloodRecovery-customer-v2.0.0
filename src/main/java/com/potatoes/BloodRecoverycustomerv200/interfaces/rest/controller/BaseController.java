@@ -3,6 +3,8 @@ package com.potatoes.BloodRecoverycustomerv200.interfaces.rest.controller;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.aggregates.Customer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,5 +32,12 @@ public class BaseController {
         headers.set("cid", value);
 
         return headers;
+    }
+
+    protected ResponseEntity<?> setReturnEntity(HttpStatus status, Optional<?> value) {
+        return new ResponseEntity<>(
+                getSuccessHeader(String.valueOf(value)),
+                status.is2xxSuccessful() ? HttpStatus.OK : HttpStatus.resolve(status.value())
+        );
     }
 }
