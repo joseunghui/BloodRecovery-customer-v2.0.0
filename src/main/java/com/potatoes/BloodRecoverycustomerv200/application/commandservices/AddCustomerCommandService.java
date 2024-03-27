@@ -3,12 +3,9 @@ package com.potatoes.BloodRecoverycustomerv200.application.commandservices;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.aggregates.Customer;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.AddCustomerCommand;
 import com.potatoes.BloodRecoverycustomerv200.domain.service.CustomerService;
-import com.potatoes.BloodRecoverycustomerv200.infrastructure.rest.dto.CustomerPhoneNumberValidation;
+import com.potatoes.BloodRecoverycustomerv200.interfaces.rest.dto.TwilioMessageFormDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import static com.potatoes.BloodRecoverycustomerv200.infrastructure.twilio.SendSMSTwilio.sendMessage;
 
 @Service
 @RequiredArgsConstructor
@@ -52,6 +49,10 @@ public class AddCustomerCommandService {
         return false;
     }
 
+    public boolean isExistCustomerPhoneNumber(String phone) {
+        return customerService.checkDuplicateCustomerPhone(phone);
+    }
+
     /**
      * 실명 인증용 SMS 번호 발송 확인
      *
@@ -60,9 +61,9 @@ public class AddCustomerCommandService {
      * @return
      */
     public boolean isValidPersonalNumber(String phone, String inputMessage) {
-        CustomerPhoneNumberValidation validation = CustomerPhoneNumberValidation.builder().build();
+        TwilioMessageFormDto dto = TwilioMessageFormDto.builder().build();
 
-        if (validation.getPhone().equals(phone) && validation.getMessage().equals(inputMessage))
+        if (dto.getUserPhoneNumber().equals(phone) && dto.getUserPhoneValidCode().equals(inputMessage))
             return true;
 
         return false;

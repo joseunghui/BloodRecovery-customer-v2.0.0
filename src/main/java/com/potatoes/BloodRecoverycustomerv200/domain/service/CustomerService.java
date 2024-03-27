@@ -2,6 +2,7 @@ package com.potatoes.BloodRecoverycustomerv200.domain.service;
 
 import com.potatoes.BloodRecoverycustomerv200.domain.model.aggregates.Customer;
 import com.potatoes.BloodRecoverycustomerv200.domain.repository.CustomerRepository;
+import com.potatoes.BloodRecoverycustomerv200.enums.auth.CustomerAuthStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,8 @@ public class CustomerService {
     }
 
     // 중복 회원 검사
+
+
     public boolean checkDuplicateCustomerUserId(String userId) {
         customerRepository.findCustomerByUserId(userId).ifPresent(m -> {
             throw new IllegalStateException("이미 존재하는 회원 입니다.");
@@ -41,6 +44,10 @@ public class CustomerService {
             throw new IllegalStateException("이미 존재하는 회원 입니다.");
         });
         return true;
+    }
+
+    public boolean checkDuplicateCustomerPhone(String phone) {
+        return !customerRepository.findCustomerByPhone(phone).isEmpty();
     }
 
     /**
@@ -86,5 +93,13 @@ public class CustomerService {
     }
 
 
+    public boolean checkValidCustomerByCid(String cid) {
 
+        Optional<Customer> result = customerRepository.findCustomerByCid(cid);
+
+        if (result.get().getUserStatus().equals(CustomerAuthStatus.CUSTOMER_STATUS_VAL))
+            return true;
+
+        return false;
+    }
 }

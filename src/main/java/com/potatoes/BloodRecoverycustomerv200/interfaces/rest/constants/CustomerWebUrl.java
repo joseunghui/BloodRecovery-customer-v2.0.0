@@ -5,6 +5,8 @@ public class CustomerWebUrl {
     // 회원 기본
     public static final String CUSTOMER = "/user";
 
+    // 정상 회원 검증
+    public static final String CUSTOMER_VALID = "/user/valid/check";
     // 가입
     public static final String CUSTOMER_ADD = "/add";
 

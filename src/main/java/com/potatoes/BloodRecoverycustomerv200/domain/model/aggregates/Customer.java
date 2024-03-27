@@ -49,9 +49,6 @@ public class Customer {
     @Column(name = "FILE_NM")
     private String fileNm;
 
-    @Column(name = "GRADE_SN", nullable = false)
-    private String gradeSn;
-
     @Column(name = "USER_STATUS", nullable = false)
     private String userStatus;
 

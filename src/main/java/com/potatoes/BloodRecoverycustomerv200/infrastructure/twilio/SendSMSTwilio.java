@@ -1,7 +1,6 @@
 package com.potatoes.BloodRecoverycustomerv200.infrastructure.twilio;
 
-import com.potatoes.BloodRecoverycustomerv200.infrastructure.rest.dto.CustomerPhoneNumberValidation;
-import com.potatoes.BloodRecoverycustomerv200.infrastructure.rest.dto.CustomerValidation;
+import com.potatoes.BloodRecoverycustomerv200.interfaces.rest.dto.TwilioMessageFormDto;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 
@@ -40,10 +39,11 @@ public class SendSMSTwilio {
                 new PhoneNumber("+16179970580"),
                 message).create();
 
-        if (msg.getStatus().equals("")) {
-            CustomerPhoneNumberValidation val
-                    = CustomerPhoneNumberValidation.builder().build();
-            val.setCustomerPhoneNumberValidation(String.valueOf(authNumber), phone);
+
+        if (msg.getStatus().equals("sent")) {
+            TwilioMessageFormDto dto = TwilioMessageFormDto.builder().build();
+            dto.setUserPhoneNumber(String.valueOf(phone));
+            dto.setUserPhoneValidCode(String.valueOf(authNumber));
         }
     }
 

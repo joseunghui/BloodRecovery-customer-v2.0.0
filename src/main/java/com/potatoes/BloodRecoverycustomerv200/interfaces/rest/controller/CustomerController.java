@@ -7,6 +7,7 @@ import com.potatoes.BloodRecoverycustomerv200.domain.model.aggregates.Customer;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.AddCustomerCommand;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.LoginCustomerCommand;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.ModifyCustomerCommand;
+import com.potatoes.BloodRecoverycustomerv200.domain.service.CustomerService;
 import com.potatoes.BloodRecoverycustomerv200.enums.auth.CustomerAuthEnum;
 import com.potatoes.BloodRecoverycustomerv200.infrastructure.rest.dto.CustomerValidation;
 import com.potatoes.BloodRecoverycustomerv200.infrastructure.twilio.SendSMSTwilio;
@@ -33,6 +34,7 @@ public class CustomerController extends BaseController {
     private final AddCustomerCommandService addCustomerCommandService;
     private final LoginCustomerCommandService loginCustomerCommandService;
     private final ModifyCustomerCommandService modifyCustomerCommandService;
+    private final CustomerService customerService;
     private final AddCustomerMapper addCustomerMapper;
     private final LoginCustomerMapper loginCustomerMapper;
     private final ModifyCustomerMapper modifyCustomerMapper;
@@ -106,8 +108,8 @@ public class CustomerController extends BaseController {
             // SMS 전송
             SendSMSTwilio.sendMessage(phone);
         } else if (Long.toString(sign).equals(String.valueOf(CustomerAuthEnum.OLD_CUSTOMER))) {
-            //TODO 입력한 전화번호가 기존 회원 번호와 일치한지 확인하는 로직 작성해야함
-
+            if (addCustomerCommandService.isExistCustomerPhoneNumber(phone))
+                SendSMSTwilio.sendMessage(phone);
         }
 
         return new ResponseEntity<>(
@@ -211,6 +213,25 @@ public class CustomerController extends BaseController {
         model.addAttribute("data", updateMyInfo);
 
         return new ResponseEntity<>(
+                getSuccessHeader(cid),
+                HttpStatus.OK
+        );
+    }
+
+    /**
+     * CID로 정상 회원 여부 조회 (정상 : true, 탈퇴 : false)
+     * @param cid
+     * @return
+     */
+    @GetMapping(CUSTOMER_VALID)
+    public ResponseEntity<Object> customerStatusValidation(
+            @RequestHeader("cid") String cid) {
+
+        CustomerValidation valid = CustomerValidation.builder()
+                .isValid(customerService.checkValidCustomerByCid(cid)).build();
+
+        return new ResponseEntity<>(
+                valid,
                 getSuccessHeader(cid),
                 HttpStatus.OK
         );
