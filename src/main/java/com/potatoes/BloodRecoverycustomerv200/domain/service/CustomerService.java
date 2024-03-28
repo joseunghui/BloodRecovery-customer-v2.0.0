@@ -46,8 +46,8 @@ public class CustomerService {
         return true;
     }
 
-    public boolean checkDuplicateCustomerPhone(String phone) {
-        return !customerRepository.findCustomerByPhone(phone).isEmpty();
+    public String checkDuplicateCustomerPhone(String phone) {
+        return customerRepository.findCustomerByPhone(phone).get().getName();
     }
 
     /**
@@ -101,5 +101,15 @@ public class CustomerService {
             return true;
 
         return false;
+    }
+
+    public Object findMyUserId(Customer customer) {
+
+        Optional<Customer> result = customerRepository.findCustomerByPhone(customer.getPhone());
+
+        if (result.get().getName().equals(customer.getName()))
+            return result.get();
+
+        return null;
     }
 }

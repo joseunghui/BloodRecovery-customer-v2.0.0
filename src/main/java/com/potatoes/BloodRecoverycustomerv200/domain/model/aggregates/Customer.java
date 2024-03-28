@@ -2,6 +2,7 @@ package com.potatoes.BloodRecoverycustomerv200.domain.model.aggregates;
 
 
 import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.AddCustomerCommand;
+import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.FindCustomerMyInfoCommand;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.LoginCustomerCommand;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.ModifyCustomerCommand;
 import lombok.*;
@@ -81,4 +82,9 @@ public class Customer {
         this.fileNm = command.getFileNm();
     }
 
+    public Customer(FindCustomerMyInfoCommand command) {
+        this.userId = command.getUserId();
+        this.name = command.getName();
+        this.phone = command.getPhone();
+    }
 }

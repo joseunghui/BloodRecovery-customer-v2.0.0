@@ -5,6 +5,7 @@ import com.potatoes.BloodRecoverycustomerv200.application.commandservices.LoginC
 import com.potatoes.BloodRecoverycustomerv200.application.commandservices.ModifyCustomerCommandService;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.aggregates.Customer;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.AddCustomerCommand;
+import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.FindCustomerMyInfoCommand;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.LoginCustomerCommand;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.ModifyCustomerCommand;
 import com.potatoes.BloodRecoverycustomerv200.domain.service.CustomerService;
@@ -101,16 +102,19 @@ public class CustomerController extends BaseController {
      */
     @PostMapping(CUSTOMER_BEFORE_PERSONAL_CHECK)
     public ResponseEntity<Object> isValidPersonalNumber(
-            @RequestHeader("cid") String cid,
+            @Validated @RequestParam String userId,
+            @Validated @RequestParam String name,
             @Validated @RequestParam String phone,
             @Validated @RequestParam Long sign) {
         if (Long.toString(sign).equals(String.valueOf(CustomerAuthEnum.NEW_CUSTOMER))) {
-            // SMS 전송
-            SendSMSTwilio.sendMessage(phone);
+
         } else if (Long.toString(sign).equals(String.valueOf(CustomerAuthEnum.OLD_CUSTOMER))) {
-            if (addCustomerCommandService.isExistCustomerPhoneNumber(phone))
+            if (addCustomerCommandService.isExistCustomerPhoneNumber(phone).equals(name))
                 SendSMSTwilio.sendMessage(phone);
         }
+
+        // SMS 전송
+        SendSMSTwilio.sendMessage(phone);
 
         return new ResponseEntity<>(
                 getSuccessHeader(null),
@@ -166,9 +170,12 @@ public class CustomerController extends BaseController {
      */
     @PostMapping(CUSTOMER_FIND)
     public ResponseEntity<String> findCustomerUserId(
-            @RequestParam String name, @RequestParam String phone) {
+            @RequestParam String name, @RequestParam String phone, Model model) {
 
-        
+        FindCustomerMyInfoCommand command = loginCustomerMapper.findCustomerMyInfoParameterToCommand(name, phone);
+
+        Optional<Customer> findMyId = (Optional<Customer>)loginCustomerCommandService.findCustomerUserId(command);
+        model.addAttribute("userId", findMyId.get().getUserId());
 
         return new ResponseEntity<>(
                 getSuccessHeader(null),

@@ -49,7 +49,7 @@ public class AddCustomerCommandService {
         return false;
     }
 
-    public boolean isExistCustomerPhoneNumber(String phone) {
+    public String isExistCustomerPhoneNumber(String phone) {
         return customerService.checkDuplicateCustomerPhone(phone);
     }
 
