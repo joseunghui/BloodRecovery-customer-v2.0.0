@@ -2,6 +2,7 @@ package com.potatoes.BloodRecoverycustomerv200.application.commandservices;
 
 import com.potatoes.BloodRecoverycustomerv200.domain.model.aggregates.Customer;
 import com.potatoes.BloodRecoverycustomerv200.domain.model.commands.AddCustomerCommand;
+import com.potatoes.BloodRecoverycustomerv200.domain.repository.CustomerRepository;
 import com.potatoes.BloodRecoverycustomerv200.domain.service.CustomerService;
 import com.potatoes.BloodRecoverycustomerv200.interfaces.rest.dto.TwilioMessageFormDto;
 import lombok.RequiredArgsConstructor;
@@ -10,17 +11,22 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AddCustomerCommandService {
-    private final CustomerService customerService;
+
+    private final CustomerRepository customerRepository;
 
     /**
      * 회원 가입
-     *
      * @param command
      * @return
      */
     public String addNewCustomer(AddCustomerCommand command) {
+
         Customer customer = new Customer(command);
-        return customerService.join(customer);
+
+        customerRepository.findCustomerByCid(customer.getCid()).ifPresent( m -> {
+            throw new IllegalStateException("이미 존재하는 회원 입니다.");
+        });
+        return customerRepository.save(customer).getCid();
     }
 
     /**
@@ -30,10 +36,11 @@ public class AddCustomerCommandService {
      * @return
      */
     public boolean isDuplicateId(String userId) {
-        if (customerService.checkDuplicateCustomerUserId(userId)) {
-            return true;
-        }
-        return false;
+
+        customerRepository.findCustomerByUserId(userId).ifPresent(m -> {
+            throw new IllegalStateException("이미 존재하는 회원 입니다.");
+        });
+        return true;
     }
 
     /**
@@ -43,14 +50,15 @@ public class AddCustomerCommandService {
      * @return
      */
     public boolean isDuplicateNickname(String nickname) {
-        if (customerService.checkDuplicateCustomerNickname(nickname)) {
-            return true;
-        }
-        return false;
+
+        customerRepository.findCustomerByNickname(nickname).ifPresent(m -> {
+            throw new IllegalStateException("이미 존재하는 회원 입니다.");
+        });
+        return true;
     }
 
     public String isExistCustomerPhoneNumber(String phone) {
-        return customerService.checkDuplicateCustomerPhone(phone);
+        return customerRepository.findCustomerByPhone(phone).get().getName();
     }
 
     /**
