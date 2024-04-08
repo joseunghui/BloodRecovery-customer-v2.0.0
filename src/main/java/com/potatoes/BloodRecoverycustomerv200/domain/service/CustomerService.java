@@ -18,81 +18,19 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
 
     /**
-     * 회원가입
-     * @param customer
+     * CID로 회원 조회
+     * @param cid
      * @return
      */
-    public String join(Customer customer) {
-        customerRepository.findCustomerByCid(customer.getCid()).ifPresent( m -> {
-            throw new IllegalStateException("이미 존재하는 회원 입니다.");
-        });
-        return customerRepository.save(customer).getCid();
-    }
-
-    // 중복 회원 검사
-
-
-    public boolean checkDuplicateCustomerUserId(String userId) {
-        customerRepository.findCustomerByUserId(userId).ifPresent(m -> {
-            throw new IllegalStateException("이미 존재하는 회원 입니다.");
-        });
-        return true;
-    }
-
-    public boolean checkDuplicateCustomerNickname(String nickname) {
-        customerRepository.findCustomerByNickname(nickname).ifPresent(m -> {
-            throw new IllegalStateException("이미 존재하는 회원 입니다.");
-        });
-        return true;
-    }
-
-    public String checkDuplicateCustomerPhone(String phone) {
-        return customerRepository.findCustomerByPhone(phone).get().getName();
-    }
-
-    /**
-     * 일반 로그인
-     * @param customer
-     * @return
-     */
-    public Customer defaultLogin(Customer customer) {
-
-        Optional<Customer> result = customerRepository.findCustomerByUserId(customer.getUserId());
-        
-        // 검증 -> 존재하지 않는 아이디
-        if (!result.isPresent()) {
-            throw new IllegalStateException("가입된 회원이 아닙니다.");
-        } else {
-            if (!customer.getPassword().equals(result.get().getPassword()))
-                throw new IllegalStateException("비밀번호가 틀렸습니다.");
-        }
-        return result.get();
-    }
-
-    public Customer getMyInfo(String cid) {
+    public Customer getCustomerInfoByCID(String cid) {
         return customerRepository.findCustomerByCid(cid).get();
     }
 
-    public Customer updateMyInfo(Customer customer) {
-
-        // customerRepository.updateMyInfo(customer);
-        // return getMyInfo(customer.getCid());
-
-        // 여기서 member는 변경 전 회원 정보
-        Optional<Customer> beforeData = customerRepository.findCustomerByCid(customer.getCid());
-
-        // 검증 2 -> 회원 아이디는 변경 불가
-        if (!beforeData.get().getUserId().equals(customer.getUserId())) {
-            throw new IllegalStateException("오류가 발생했습니다.");
-        } else {
-            // 회원 아이디가 동일하다면 회원 정보 변경
-
-        }
-
-        return null;
-    }
-
-
+    /**
+     * 유효 회원 여부 조회
+     * @param cid
+     * @return
+     */
     public boolean checkValidCustomerByCid(String cid) {
 
         Optional<Customer> result = customerRepository.findCustomerByCid(cid);
@@ -103,13 +41,4 @@ public class CustomerService {
         return false;
     }
 
-    public Object findMyUserId(Customer customer) {
-
-        Optional<Customer> result = customerRepository.findCustomerByPhone(customer.getPhone());
-
-        if (result.get().getName().equals(customer.getName()))
-            return result.get();
-
-        return null;
-    }
 }
